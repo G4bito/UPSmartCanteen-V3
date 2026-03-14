@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Phinma / UPSmart Canteen Color Scheme -->
+    <color name="primary">#1B4323</color> <!-- Dark Green -->
+    <color name="primary_variant">#0E2614</color>
+    <color name="on_primary">#FFFFFF</color>
+
+    <color name="secondary">#2D4628</color>
+    <color name="secondary_variant">#1B4323</color>
+    <color name="on_secondary">#FFFFFF</color>
+
+    <color name="background">#F4F1E1</color> <!-- Light Beige/Cream -->
+    <color name="on_background">#1B4323</color>
+
+    <color name="surface">#FFFFFF</color>
+    <color name="on_surface">#1B4323</color>
+
+    <color name="error">#B00020</color>
+    <color name="success">#4CAF50</color>
+    <color name="warning">#FFC107</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="text_primary">#1B4323</color>
+    <color name="text_secondary">#556B2F</color>
+    <color name="text_hint">#8A9A5B</color>
+
+    <color name="divider">#D1CDBC</color>
+
+    <color name="gray_100">#F5F5F5</color>
+    <color name="gray_200">#EEEEEE</color>
+    <color name="gray_400">#BDBDBD</color>
+    <color name="gray_600">#757575</color>
+    <color name="gray_800">#424242</color>
+</resources>

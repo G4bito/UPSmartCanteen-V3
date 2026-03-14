@@ -1,0 +1,15 @@
+<resources>
+  <string name="app_name">UPSmart Canteen Frontend</string>
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
+  <string-array name="departments_array">
+    <item>CAHS</item>
+    <item>CAS</item>
+    <item>CCJE</item>
+    <item>CEA</item>
+    <item>CELA</item>
+    <item>CHTM</item>
+    <item>CITE</item>
+    <item>CMA</item>
+  </string-array>
+</resources>

@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.UPSmartCanteenFrontend" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor" tools:targetApi="1">#1B4323</item>
+        <item name="android:navigationBarColor" tools:targetApi="1">#1B4323</item>
+    </style>
+
+    <style name="Theme.UPSmartCanteenFrontend" parent="Base.Theme.UPSmartCanteenFrontend" />
+
+    <style name="CircleImage">
+        <item name="cornerSize">50%</item>
+    </style>
+</resources>
