@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:paddingVertical="12dp"
     android:paddingHorizontal="16dp"
-    android:background="@color/white">
+    android:background="@android:color/white">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivFoodImage"
@@ -13,7 +13,7 @@
         android:layout_height="80dp"
         android:scaleType="centerCrop"
         android:src="@drawable/food_image"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent"
+        app:shapeAppearanceOverlay="@style/CircleImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,12 +31,13 @@
         app:layout_constraintTop_toTopOf="@id/ivFoodImage" />
 
     <TextView
-        android:id="@+id/tvOptions"
+        android:id="@+id/tvStallName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Regular Size, No spicy"
-        android:textColor="#999999"
+        android:text="Stall Name"
+        android:textColor="#2D5016"
         android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tvPrice"
         app:layout_constraintStart_toStartOf="@id/tvFoodName"
         app:layout_constraintTop_toBottomOf="@id/tvFoodName" />
@@ -55,20 +56,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@drawable/bg_input_field"
-        android:backgroundTint="#F8F9FA"
+        android:background="@drawable/bg_circle_light"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="8dp"
         android:paddingVertical="4dp"
         app:layout_constraintStart_toStartOf="@id/tvFoodName"
-        app:layout_constraintTop_toBottomOf="@id/tvOptions">
+        app:layout_constraintTop_toBottomOf="@id/tvStallName">
 
         <ImageView
             android:id="@+id/btnRemove"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@android:drawable/ic_menu_delete"
+            android:src="@drawable/ic_minus"
             app:tint="#666666" />
 
         <TextView
@@ -85,7 +85,7 @@
             android:id="@+id/btnAdd"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@android:drawable/ic_input_add"
+            android:src="@drawable/ic_plus"
             app:tint="#2D5016" />
     </LinearLayout>
 

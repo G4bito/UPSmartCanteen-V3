@@ -95,7 +95,7 @@
                         android:textColor="#2D5016" />
 
                     <TextView
-                        android:id="@+id/chipMeals"
+                        android:id="@+id/chipDrinks"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -104,8 +104,9 @@
                         android:paddingVertical="8dp"
                         android:text="Drinks"
                         android:textColor="#2D5016" />
+
                     <TextView
-                        android:id="@+id/chipMeals"
+                        android:id="@+id/chipDessert"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"

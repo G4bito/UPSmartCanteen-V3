@@ -6,15 +6,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.yutahnahsyah.upsmartcanteenfrontend.R
-import com.yutahnahsyah.upsmartcanteenfrontend.data.model.Store
+import com.yutahnahsyah.upsmartcanteenfrontend.data.model.Stall
 
 class StoreAdapter(
-  private var stores: List<Store>,
-  private val onClick: (Store) -> Unit
+  private var stalls: List<Stall>,
+  private val onClick: (Stall) -> Unit
 ) : RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
 
-  private var fullStoreList: List<Store> = stores
+  private var fullStallList: List<Stall> = stalls
 
   class StoreViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val name: TextView = view.findViewById(R.id.storeName)
@@ -28,23 +29,42 @@ class StoreAdapter(
   }
 
   override fun onBindViewHolder(holder: StoreViewHolder, position: Int) {
-    val store = stores[position]
-    holder.name.text = store.name
-    holder.category.text = store.category
-    holder.image.setImageResource(store.imageRes)
+    val stall = stalls[position]
+    holder.name.text = stall.stall_name
+    holder.category.text = stall.location // Using location as the subtitle/category
 
-    holder.itemView.setOnClickListener { onClick(store) }
+    val serverUrl = "http://192.168.68.113:3000"
+    val imageUrl = if (!stall.stall_image_url.isNullOrEmpty()) {
+        val cleanPath = stall.stall_image_url.trim().removePrefix("/")
+        "$serverUrl/$cleanPath"
+    } else {
+        null
+    }
+
+    Glide.with(holder.itemView.context)
+        .load(imageUrl)
+        .placeholder(R.drawable.store_image)
+        .error(R.drawable.store_image)
+        .into(holder.image)
+
+    holder.itemView.setOnClickListener { onClick(stall) }
   }
 
-  override fun getItemCount() = stores.size
+  override fun getItemCount() = stalls.size
+
+  fun updateData(newStalls: List<Stall>) {
+    this.stalls = newStalls
+    this.fullStallList = newStalls
+    notifyDataSetChanged()
+  }
 
   fun filter(query: String) {
-    stores = if (query.isEmpty()) {
-      fullStoreList
+    stalls = if (query.isEmpty()) {
+      fullStallList
     } else {
-      fullStoreList.filter { 
-        it.name.contains(query, ignoreCase = true) || 
-        it.category.contains(query, ignoreCase = true) 
+      fullStallList.filter { 
+        it.stall_name.contains(query, ignoreCase = true) || 
+        it.location.contains(query, ignoreCase = true)
       }
     }
     notifyDataSetChanged()

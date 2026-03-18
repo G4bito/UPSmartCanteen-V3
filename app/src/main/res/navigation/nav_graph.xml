@@ -70,6 +70,9 @@
         <argument
             android:name="storeName"
             app:argType="string" />
+        <argument
+            android:name="stallId"
+            app:argType="integer" />
     </fragment>
 
     <fragment

@@ -5,60 +5,98 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.yutahnahsyah.upsmartcanteenfrontend.R
-import com.yutahnahsyah.upsmartcanteenfrontend.data.model.Food
+import com.yutahnahsyah.upsmartcanteenfrontend.data.model.FoodItem
+import java.util.Locale
 
 class FoodAdapter(
-    private val fullList: List<Food>,    // Renamed to 'fullList' to avoid confusion
-    private val onClick: (Food) -> Unit
+    private var fullList: List<FoodItem>,
+    private val onClick: (FoodItem) -> Unit
 ) : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
 
-    // This is the list the RecyclerView actually "sees"
-    private var displayedList: MutableList<Food> = fullList.toMutableList()
+    private var displayedList: MutableList<FoodItem> = fullList.toMutableList()
 
     class FoodViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.foodName)
         val price: TextView = view.findViewById(R.id.foodPrice)
         val store: TextView = view.findViewById(R.id.foodStore)
         val image: ImageView = view.findViewById(R.id.foodImage)
+        val description: TextView = view.findViewById(R.id.foodDescription)
+        val stock: TextView = view.findViewById(R.id.foodStock)
+        val status: TextView = view.findViewById(R.id.foodStatus)
+        val category: TextView = view.findViewById(R.id.foodCategory)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FoodViewHolder {
-        // Kept your layout name 'item_food'
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_food, parent, false)
         return FoodViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: FoodViewHolder, position: Int) {
-        // IMPORTANT: Use 'displayedList' here, not 'fullList'
         val food = displayedList[position]
 
         holder.name.text = food.name
-        holder.price.text = "₱${food.price}"
-        holder.store.text = food.store
-        holder.image.setImageResource(food.imageRes)
+        holder.price.text = String.format(Locale.getDefault(), "₱%.2f", food.price)
+        
+        holder.store.text = food.stall_name ?: "Unknown Stall"
+        holder.category.text = food.category
+        holder.description.text = food.description ?: "No description provided."
+        holder.stock.text = "Stocks: ${food.stock_qty}"
+
+        if (food.is_available && food.stock_qty > 0) {
+            holder.status.text = "Available"
+            holder.status.setTextColor(ContextCompat.getColor(holder.itemView.context, android.R.color.holo_green_dark))
+        } else {
+            holder.status.text = if (food.stock_qty <= 0) "Out of Stock" else "Unavailable"
+            holder.status.setTextColor(ContextCompat.getColor(holder.itemView.context, android.R.color.holo_red_dark))
+        }
+
+        val serverUrl = "http://192.168.18.41:3000"
+        val imageUrl = if (!food.image_url.isNullOrEmpty()) {
+            val cleanPath = food.image_url.trim().removePrefix("/")
+            "$serverUrl/$cleanPath"
+        } else {
+            null
+        }
+
+        Glide.with(holder.itemView.context)
+            .load(imageUrl)
+            .placeholder(R.drawable.food_image)
+            .error(R.drawable.food_image)
+            .into(holder.image)
 
         holder.itemView.setOnClickListener { onClick(food) }
     }
 
-    // Return the size of the FILTERED list
     override fun getItemCount() = displayedList.size
 
-    // --- NEW: Filter by Category ("Meals", "Snacks") ---
+    fun getItemList(): List<FoodItem> {
+        return displayedList
+    }
+
+    fun updateData(newList: List<FoodItem>) {
+        this.fullList = newList
+        this.displayedList = newList.toMutableList()
+        notifyDataSetChanged()
+    }
+
     fun filterByCategory(category: String) {
         displayedList.clear()
         if (category == "All") {
             displayedList.addAll(fullList)
         } else {
-            // This requires the 'category' field in your Food.kt!
-            val filtered = fullList.filter { it.category.equals(category, ignoreCase = true) }
+            val filtered = fullList.filter { 
+                // Using startsWith to match "Dessert" with "Desserts" in the database
+                it.category.startsWith(category, ignoreCase = true)
+            }
             displayedList.addAll(filtered)
         }
         notifyDataSetChanged()
     }
 
-    // --- NEW: Filter by Search Text ---
     fun filterBySearch(query: String) {
         displayedList.clear()
         if (query.isEmpty()) {

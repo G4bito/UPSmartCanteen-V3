@@ -122,7 +122,7 @@ class ProfileFragment : Fragment() {
 
             if (!user.profile_picture_url.isNullOrEmpty()) {
               val cleanPath = user.profile_picture_url!!.trim().removePrefix("/")
-              val fullImageUrl = "http://192.168.68.113:3000/$cleanPath"
+              val fullImageUrl = "http://192.168.18.41:3000/$cleanPath"
               android.util.Log.d("GLIDE_DEBUG", "Loading into Glide: $fullImageUrl")
 
               Glide.with(this@ProfileFragment)
