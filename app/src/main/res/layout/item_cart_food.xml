@@ -3,73 +3,92 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="12dp"
     android:paddingHorizontal="16dp"
+    android:paddingVertical="12dp"
     android:background="@android:color/white">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/ivFoodImage"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/food_image"
-        app:shapeAppearanceOverlay="@style/CircleImage"
+    <!-- Food image: rounded square via CardView -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/imageCard"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#F2F6F2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
+        <ImageView
+            android:id="@+id/ivFoodImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/food_image" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Food name -->
     <TextView
         android:id="@+id/tvFoodName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
+        android:layout_marginTop="2dp"
         android:text="Food Name"
-        android:textColor="#333333"
-        android:textSize="15sp"
+        android:textColor="#1A3E1A"
+        android:textSize="13sp"
         android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"
         app:layout_constraintEnd_toStartOf="@+id/tvPrice"
-        app:layout_constraintStart_toEndOf="@id/ivFoodImage"
-        app:layout_constraintTop_toTopOf="@id/ivFoodImage" />
+        app:layout_constraintStart_toEndOf="@id/imageCard"
+        app:layout_constraintTop_toTopOf="@id/imageCard" />
 
+    <!-- Stall name -->
     <TextView
         android:id="@+id/tvStallName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:text="Stall Name"
-        android:textColor="#2D5016"
-        android:textSize="12sp"
-        android:textStyle="bold"
+        android:textColor="#90A4AE"
+        android:textSize="11sp"
         app:layout_constraintEnd_toStartOf="@+id/tvPrice"
         app:layout_constraintStart_toStartOf="@id/tvFoodName"
         app:layout_constraintTop_toBottomOf="@id/tvFoodName" />
 
+    <!-- Price -->
     <TextView
         android:id="@+id/tvPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="0dp"
         android:text="₱0.00"
-        android:textColor="#333333"
-        android:textSize="15sp"
+        android:textColor="#1B5E20"
+        android:textSize="14sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tvFoodName" />
 
+    <!-- Quantity controls -->
     <LinearLayout
+        android:id="@+id/quantityRow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@drawable/bg_circle_light"
+        android:background="@drawable/bg_quantity_control"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="4dp"
         app:layout_constraintStart_toStartOf="@id/tvFoodName"
         app:layout_constraintTop_toBottomOf="@id/tvStallName">
 
         <ImageView
             android:id="@+id/btnRemove"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:padding="6dp"
             android:src="@drawable/ic_minus"
-            app:tint="#666666" />
+            app:tint="#2E7D32" />
 
         <TextView
             android:id="@+id/tvQuantity"
@@ -77,23 +96,27 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="1"
-            android:textColor="#333333"
-            android:textSize="14sp"
+            android:textColor="#1A3E1A"
+            android:textSize="13sp"
             android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/btnAdd"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:padding="6dp"
             android:src="@drawable/ic_plus"
-            app:tint="#2D5016" />
+            app:tint="#2E7D32" />
     </LinearLayout>
 
+    <!-- Divider -->
     <View
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:background="#EEEEEE"
-        app:layout_constraintTop_toBottomOf="@id/ivFoodImage" />
+        android:layout_marginTop="12dp"
+        android:background="#F0F4F0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageCard" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

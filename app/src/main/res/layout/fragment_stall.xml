@@ -3,59 +3,182 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="#F2F6F2"
     android:orientation="vertical">
 
-    <LinearLayout
+    <!-- ===== GREEN HEADER ===== -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="24dp">
+        android:background="@drawable/bg_header_deep"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingBottom="24dp">
 
+        <!-- Decorative top-right circle -->
+        <View
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="-40dp"
+            android:layout_marginEnd="-40dp"
+            android:alpha="0.05"
+            android:background="@drawable/bg_circle_plain"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Decorative bottom-left circle -->
+        <View
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginStart="-20dp"
+            android:layout_marginTop="70dp"
+            android:alpha="0.04"
+            android:background="@drawable/bg_circle_plain"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Gold accent pill -->
+        <View
+            android:id="@+id/goldPill"
+            android:layout_width="28dp"
+            android:layout_height="3dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/bg_gold_pill"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Title -->
         <TextView
+            android:id="@+id/headerTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-black"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="6dp"
             android:text="Available Stalls"
-            android:textColor="#2D5016"
-            android:textSize="28sp" />
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/goldPill" />
 
+        <!-- Subtitle -->
+        <TextView
+            android:id="@+id/headerSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="4dp"
+            android:text="UNIVERSITY OF PANGASINAN"
+            android:textColor="#A8D5AA"
+            android:textSize="9sp"
+            android:letterSpacing="0.12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headerTitle" />
+
+        <!-- Search bar -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/bg_search"
+            android:id="@+id/searchContainer"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_search_glass"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp">
+            android:paddingHorizontal="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headerSubtitle">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@android:drawable/ic_menu_search"
-                app:tint="#C9B896" />
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_search"
+                app:tint="#AAFFFFFF" />
 
             <EditText
                 android:id="@+id/searchBar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
+                android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:hint="Search for stalls..."
-                android:textColor="#2D5016"
-                android:textColorHint="#C9B896"
-                android:textSize="14sp" />
+                android:inputType="text"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#66FFFFFF"
+                android:textSize="13sp" />
         </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ===== STALL COUNT ROW ===== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="10dp"
+        android:elevation="2dp">
+
+        <!-- Section label with green bar -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_green_bar" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All Stalls"
+                android:textColor="#1A3E1A"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Open count chip -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/openCountChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#E8F5E9">
+
+            <TextView
+                android:id="@+id/tvOpenCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="5dp"
+                android:text="0 open"
+                android:textColor="#2E7D32"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 
+    <!-- ===== STALLS RECYCLERVIEW ===== -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
         android:clipToPadding="false"
-        android:paddingHorizontal="8dp"
-        android:paddingBottom="16dp" />
+        android:overScrollMode="never"
+        android:paddingHorizontal="14dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="24dp" />
 
 </LinearLayout>

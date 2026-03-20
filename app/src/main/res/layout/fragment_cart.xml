@@ -3,58 +3,80 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F7F7"
+    android:background="#F2F6F2"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <!-- ===== GREEN HEADER ===== -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:padding="16dp"
-        android:elevation="2dp">
+        android:background="@drawable/bg_header_deep"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingBottom="1dp">
 
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_back"
-            app:tint="#333333" />
+        <!-- Decorative circles -->
+        <View
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="-40dp"
+            android:layout_marginEnd="-40dp"
+            android:alpha="0.05"
+            android:background="@drawable/bg_circle_plain"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tvCartHeader"
+        <View
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="-20dp"
+            android:layout_marginTop="60dp"
+            android:alpha="0.04"
+            android:background="@drawable/bg_circle_plain"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Title + subtitle -->
+        <LinearLayout
+            android:id="@+id/titleBlock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@id/btnBack"
-            android:fontFamily="sans-serif-black"
-            android:text="All carts"
-            android:textColor="#333333"
-            android:textSize="20sp" />
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tvDeliverTo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvCartHeader"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@id/btnBack"
-            android:text="Deliver to: Your Location"
-            android:textColor="#666666"
-            android:textSize="12sp" />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tvCartHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All Carts"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/tvDeliverTo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Deliver to: Your Location"
+                android:textColor="#A8D5AA"
+                android:textSize="11sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ===== CARTS RECYCLERVIEW ===== -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingVertical="8dp" />
-
-    <!-- Total amount section at the bottom is usually for a single cart,
-         but foodpanda's 'All carts' view usually doesn't have a grand total
-         until you go into a specific cart. However, let's keep it if the user wants it,
-         or remove it to match the screenshot better.
-         The screenshot doesn't show a global checkout button. -->
+        android:overScrollMode="never"
+        android:paddingHorizontal="14dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="24dp" />
 
 </LinearLayout>

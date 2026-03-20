@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.yutahnahsyah.upsmartcanteenfrontend.R
 
@@ -15,7 +14,7 @@ class PrivacyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
+        view.findViewById<View>(R.id.toolbar).setOnClickListener {
             parentFragmentManager.popBackStack()
         }
     }

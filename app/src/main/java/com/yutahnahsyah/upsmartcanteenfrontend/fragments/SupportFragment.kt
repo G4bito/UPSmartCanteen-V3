@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.card.MaterialCardView
 import com.yutahnahsyah.upsmartcanteenfrontend.R
 
 class SupportFragment : Fragment() {
@@ -24,16 +22,17 @@ class SupportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
-        toolbar.setNavigationOnClickListener {
+        val btnBack = view.findViewById<View>(R.id.toolbar)
+        btnBack.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
 
-        view.findViewById<MaterialCardView>(R.id.btnContactEmail).setOnClickListener {
+        // Changed from MaterialCardView to View to avoid ClassCastException (Layout uses LinearLayout)
+        view.findViewById<View>(R.id.btnContactEmail).setOnClickListener {
             Toast.makeText(context, "Opening email client...", Toast.LENGTH_SHORT).show()
         }
 
-        view.findViewById<MaterialCardView>(R.id.btnContactPhone).setOnClickListener {
+        view.findViewById<View>(R.id.btnContactPhone).setOnClickListener {
             Toast.makeText(context, "Opening dialer...", Toast.LENGTH_SHORT).show()
         }
 

@@ -4,54 +4,121 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="10dp"
-    app:cardBackgroundColor="@color/surface"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="2dp">
+    android:layout_marginVertical="8dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="6dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="16dp">
+        android:layout_height="wrap_content">
 
+        <!-- Banner image -->
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/storeImage"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="150dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_background"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.MediumComponent" />
+            app:shapeAppearanceOverlay="@style/StallCardImageShape" />
 
+        <!-- Dim overlay for closed state (toggle visibility in code) -->
+        <View
+            android:id="@+id/closedOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="#59000000"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Open/Closed status badge (top left) -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/statusBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="10dp"
+                android:paddingVertical="5dp">
+
+                <View
+                    android:id="@+id/statusDot"
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/bg_status_dot_open" />
+
+                <TextView
+                    android:id="@+id/statusText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OPEN"
+                    android:textColor="#1B5E20"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Store name -->
         <TextView
             android:id="@+id/storeName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="14dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="sans-serif-medium"
             android:text="Main Canteen Stall"
-            android:textColor="@color/text_primary"
-            android:textSize="18sp"
+            android:textColor="#1A3E1A"
+            android:textSize="17sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/storeImage" />
 
-        <TextView
-            android:id="@+id/storeCategory"
-            android:layout_width="wrap_content"
+        <!-- Bottom row: category chip only -->
+        <LinearLayout
+            android:id="@+id/bottomRow"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:background="@drawable/bg_price_tag"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="4dp"
-            android:text="HOME-COOKED"
-            android:textColor="@color/text_secondary"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/storeName"
-            app:layout_constraintTop_toBottomOf="@id/storeName" />
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/storeName">
+
+            <!-- Category chip -->
+            <TextView
+                android:id="@+id/storeCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_category_chip"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:text="HOME-COOKED"
+                android:textColor="#2E7D32"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

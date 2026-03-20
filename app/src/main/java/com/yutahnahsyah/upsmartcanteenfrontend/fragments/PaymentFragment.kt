@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.yutahnahsyah.upsmartcanteenfrontend.R
 
@@ -21,9 +20,11 @@ class PaymentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
-        toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
+        // FIXED: The ID 'toolbar' in fragment_payment.xml is a CardView, not a Toolbar.
+        // Using View to avoid ClassCastException and setOnClickListener instead of setNavigationOnClickListener.
+        val btnBack = view.findViewById<View>(R.id.toolbar)
+        btnBack?.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 }

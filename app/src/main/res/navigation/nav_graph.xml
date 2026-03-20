@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_nav_cart_to_nav_cart_details"
             app:destination="@id/nav_cart_details" />
+        <action
+            android:id="@+id/action_nav_cart_to_nav_store_food"
+            app:destination="@id/nav_store_food" />
     </fragment>
 
     <fragment

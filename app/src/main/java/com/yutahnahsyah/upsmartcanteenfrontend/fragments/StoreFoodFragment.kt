@@ -61,7 +61,7 @@ class StoreFoodFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val titleTextView = view.findViewById<TextView>(R.id.storeTitle)
-        val backButton = view.findViewById<ImageView>(R.id.btnBack)
+        val backButton = view.findViewById<View>(R.id.btnBack)
         val rv = view.findViewById<RecyclerView>(R.id.foodRecyclerView)
         val searchBar = view.findViewById<EditText>(R.id.searchBar)
 
@@ -116,10 +116,16 @@ class StoreFoodFragment : Fragment() {
         val foodDesc = view.findViewById<TextView>(R.id.dialogFoodDescription)
         val foodPrice = view.findViewById<TextView>(R.id.dialogFoodPrice)
         val btnAddToCart = view.findViewById<MaterialButton>(R.id.btnAddToCart)
-        val btnPlus = view.findViewById<ImageView>(R.id.btnPlus)
-        val btnMinus = view.findViewById<ImageView>(R.id.btnMinus)
+        
+        // FIXED: Found as View instead of ImageView to avoid ClassCastException (XML uses CardView)
+        val btnPlus = view.findViewById<View>(R.id.btnPlus)
+        val btnMinus = view.findViewById<View>(R.id.btnMinus)
+        
         val tvQuantity = view.findViewById<TextView>(R.id.tvQuantity)
-        val btnClose = view.findViewById<ImageView>(R.id.btnCloseDialog)
+        val tvSubtotal = view.findViewById<TextView>(R.id.tvSubtotal)
+        
+        // FIXED: Found as View instead of ImageView to avoid ClassCastException (XML uses CardView)
+        val btnClose = view.findViewById<View>(R.id.btnCloseDialog)
 
         var quantity = 1
 
@@ -127,6 +133,7 @@ class StoreFoodFragment : Fragment() {
         foodStall.text = "By ${food.stall_name}"
         foodDesc.text = food.description ?: "No description provided."
         foodPrice.text = String.format(Locale.getDefault(), "₱%.2f", food.price)
+        tvSubtotal.text = String.format(Locale.getDefault(), "₱%.2f", food.price)
 
         val serverUrl = "http://192.168.18.41:3000"
         val imageUrl = if (!food.image_url.isNullOrEmpty()) {
@@ -145,7 +152,7 @@ class StoreFoodFragment : Fragment() {
             if (quantity < food.stock_qty) {
                 quantity++
                 tvQuantity.text = quantity.toString()
-                foodPrice.text = String.format(Locale.getDefault(), "₱%.2f", food.price * quantity)
+                tvSubtotal.text = String.format(Locale.getDefault(), "₱%.2f", food.price * quantity)
             } else {
                 Toast.makeText(requireContext(), "Max stock reached", Toast.LENGTH_SHORT).show()
             }
@@ -155,7 +162,7 @@ class StoreFoodFragment : Fragment() {
             if (quantity > 1) {
                 quantity--
                 tvQuantity.text = quantity.toString()
-                foodPrice.text = String.format(Locale.getDefault(), "₱%.2f", food.price * quantity)
+                tvSubtotal.text = String.format(Locale.getDefault(), "₱%.2f", food.price * quantity)
             }
         }
 

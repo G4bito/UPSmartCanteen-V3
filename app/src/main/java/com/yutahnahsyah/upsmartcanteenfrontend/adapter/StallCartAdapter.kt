@@ -71,6 +71,10 @@ class StallCartAdapter(
 
     override fun getItemCount() = stallCarts.size
 
+    fun getStallCartAt(position: Int): StallCart {
+        return stallCarts[position]
+    }
+
     fun updateData(newList: List<StallCart>) {
         this.stallCarts = newList
         notifyDataSetChanged()

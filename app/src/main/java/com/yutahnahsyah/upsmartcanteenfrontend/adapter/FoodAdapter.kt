@@ -1,10 +1,12 @@
 package com.yutahnahsyah.upsmartcanteenfrontend.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -28,6 +30,8 @@ class FoodAdapter(
         val stock: TextView = view.findViewById(R.id.foodStock)
         val status: TextView = view.findViewById(R.id.foodStatus)
         val category: TextView = view.findViewById(R.id.foodCategory)
+        val statusDot: View = view.findViewById(R.id.statusDot)
+        val btnAddToCart: CardView = view.findViewById(R.id.btnAddToCart)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FoodViewHolder {
@@ -37,23 +41,37 @@ class FoodAdapter(
 
     override fun onBindViewHolder(holder: FoodViewHolder, position: Int) {
         val food = displayedList[position]
+        val ctx = holder.itemView.context
 
+        // Basic fields
         holder.name.text = food.name
         holder.price.text = String.format(Locale.getDefault(), "₱%.2f", food.price)
-        
         holder.store.text = food.stall_name ?: "Unknown Stall"
-        holder.category.text = food.category
+        holder.category.text = food.category.uppercase()
         holder.description.text = food.description ?: "No description provided."
         holder.stock.text = "Stocks: ${food.stock_qty}"
 
-        if (food.is_available && food.stock_qty > 0) {
+        // Status — dot color + label + add button state
+        val isAvailable = food.is_available && food.stock_qty > 0
+        if (isAvailable) {
+            holder.statusDot.background =
+                ContextCompat.getDrawable(ctx, R.drawable.bg_status_dot_open)
             holder.status.text = "Available"
-            holder.status.setTextColor(ContextCompat.getColor(holder.itemView.context, android.R.color.holo_green_dark))
+            holder.status.setTextColor(Color.parseColor("#43A047"))
+            holder.btnAddToCart.setCardBackgroundColor(Color.parseColor("#1B5E20"))
+            holder.btnAddToCart.isClickable = true
+            holder.btnAddToCart.alpha = 1f
         } else {
+            holder.statusDot.background =
+                ContextCompat.getDrawable(ctx, R.drawable.bg_status_dot_closed)
             holder.status.text = if (food.stock_qty <= 0) "Out of Stock" else "Unavailable"
-            holder.status.setTextColor(ContextCompat.getColor(holder.itemView.context, android.R.color.holo_red_dark))
+            holder.status.setTextColor(Color.parseColor("#E53935"))
+            holder.btnAddToCart.setCardBackgroundColor(Color.parseColor("#E0E0E0"))
+            holder.btnAddToCart.isClickable = false
+            holder.btnAddToCart.alpha = 0.5f
         }
 
+        // Load image
         val serverUrl = "http://192.168.18.41:3000"
         val imageUrl = if (!food.image_url.isNullOrEmpty()) {
             val cleanPath = food.image_url.trim().removePrefix("/")
@@ -62,20 +80,22 @@ class FoodAdapter(
             null
         }
 
-        Glide.with(holder.itemView.context)
+        Glide.with(ctx)
             .load(imageUrl)
             .placeholder(R.drawable.food_image)
             .error(R.drawable.food_image)
             .into(holder.image)
 
+        // Click listeners
         holder.itemView.setOnClickListener { onClick(food) }
+        holder.btnAddToCart.setOnClickListener {
+            if (isAvailable) onClick(food)
+        }
     }
 
     override fun getItemCount() = displayedList.size
 
-    fun getItemList(): List<FoodItem> {
-        return displayedList
-    }
+    fun getItemList(): List<FoodItem> = displayedList
 
     fun updateData(newList: List<FoodItem>) {
         this.fullList = newList
@@ -88,11 +108,9 @@ class FoodAdapter(
         if (category == "All") {
             displayedList.addAll(fullList)
         } else {
-            val filtered = fullList.filter { 
-                // Using startsWith to match "Dessert" with "Desserts" in the database
+            displayedList.addAll(fullList.filter {
                 it.category.startsWith(category, ignoreCase = true)
-            }
-            displayedList.addAll(filtered)
+            })
         }
         notifyDataSetChanged()
     }
@@ -102,10 +120,9 @@ class FoodAdapter(
         if (query.isEmpty()) {
             displayedList.addAll(fullList)
         } else {
-            val filtered = fullList.filter {
+            displayedList.addAll(fullList.filter {
                 it.name.contains(query, ignoreCase = true)
-            }
-            displayedList.addAll(filtered)
+            })
         }
         notifyDataSetChanged()
     }

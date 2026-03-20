@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.yutahnahsyah.upsmartcanteenfrontend.BaseActivity
@@ -29,6 +30,7 @@ class Login : BaseActivity() {
     val passwordField = findViewById<EditText>(R.id.passwordEditText)
     val loginBtn = findViewById<Button>(R.id.loginButton)
     val registerBtn = findViewById<Button>(R.id.registerButton)
+    val forgotPasswordBtn = findViewById<TextView>(R.id.forgotPassword)
     val togglePasswordBtn = findViewById<ImageButton>(R.id.togglePasswordVisibility)
     val progressBar =
       findViewById<ProgressBar>(R.id.progressBar)
@@ -59,6 +61,11 @@ class Login : BaseActivity() {
 
     registerBtn.setOnClickListener {
       val intent = Intent(this@Login, CreateAccountActivity::class.java)
+      startActivity(intent)
+    }
+
+    forgotPasswordBtn.setOnClickListener {
+      val intent = Intent(this@Login, ForgotPasswordActivity::class.java)
       startActivity(intent)
     }
   }

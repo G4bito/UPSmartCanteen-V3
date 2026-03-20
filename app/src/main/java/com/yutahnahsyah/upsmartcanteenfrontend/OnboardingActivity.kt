@@ -11,8 +11,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import androidx.cardview.widget.CardView
 import com.google.android.material.button.MaterialButton
 import com.yutahnahsyah.upsmartcanteenfrontend.auth.Login
 
@@ -20,7 +22,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private lateinit var viewPager: ViewPager2
     private lateinit var btnNext: MaterialButton
-    private lateinit var tvSkip: TextView
+    private lateinit var tvSkipTop: CardView
     private lateinit var layoutIndicators: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,11 +31,10 @@ class OnboardingActivity : AppCompatActivity() {
         // Check if onboarding has already been completed
         val sharedPref = getSharedPreferences("onboarding", Context.MODE_PRIVATE)
         val isFirstTime = sharedPref.getBoolean("isFirstTime", true)
-        
-        // If not first time and not explicitly requested from Profile, skip to Login
+
         val forceShow = intent.getBooleanExtra("forceShow", false)
         if (!isFirstTime && !forceShow) {
-            navigateToLogin()
+            proceedToNext()
             return
         }
 
@@ -41,7 +42,7 @@ class OnboardingActivity : AppCompatActivity() {
 
         viewPager = findViewById(R.id.viewPager)
         btnNext = findViewById(R.id.btnNext)
-        tvSkip = findViewById(R.id.tvSkip)
+        tvSkipTop = findViewById(R.id.tvSkipTop)
         layoutIndicators = findViewById(R.id.layoutIndicators)
 
         val onboardingItems = listOf(
@@ -73,83 +74,86 @@ class OnboardingActivity : AppCompatActivity() {
                 viewPager.currentItem += 1
             } else {
                 markOnboardingComplete()
-                navigateToLogin()
+                proceedToNext()
             }
         }
 
-        tvSkip.setOnClickListener {
+        tvSkipTop.setOnClickListener {
             markOnboardingComplete()
-            navigateToLogin()
+            proceedToNext()
         }
 
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setCurrentIndicator(position)
-                if (position == onboardingItems.size - 1) {
-                    btnNext.text = "Get Started"
-                } else {
-                    btnNext.text = "Next"
-                }
+                btnNext.text = if (position == onboardingItems.size - 1) "Get Started" else "Next"
             }
         })
     }
 
     private fun markOnboardingComplete() {
-        val sharedPref = getSharedPreferences("onboarding", Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
+        getSharedPreferences("onboarding", Context.MODE_PRIVATE).edit {
             putBoolean("isFirstTime", false)
-            apply()
         }
     }
 
     private fun setupIndicators(count: Int) {
-        val indicators = arrayOfNulls<ImageView>(count)
-        val layoutParams: LinearLayout.LayoutParams =
-            LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-        layoutParams.setMargins(6, 0, 6, 0)
+        layoutIndicators.removeAllViews()
+        val params = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).apply { setMargins(6, 0, 6, 0) }
 
-        for (i in indicators.indices) {
-            indicators[i] = ImageView(applicationContext)
-            indicators[i]?.setImageDrawable(
-                ContextCompat.getDrawable(
-                    applicationContext,
-                    R.drawable.dot_unselected
+        repeat(count) { i ->
+            val dot = ImageView(applicationContext).apply {
+                setImageDrawable(
+                    ContextCompat.getDrawable(
+                        applicationContext,
+                        if (i == 0) R.drawable.indicator_active else R.drawable.indicator_inactive
+                    )
                 )
-            )
-            indicators[i]?.layoutParams = layoutParams
-            layoutIndicators.addView(indicators[i])
+                layoutParams = params
+            }
+            layoutIndicators.addView(dot)
         }
     }
 
     private fun setCurrentIndicator(index: Int) {
-        val childCount = layoutIndicators.childCount
-        for (i in 0 until childCount) {
-            val imageView = layoutIndicators.getChildAt(i) as ImageView
-            if (i == index) {
-                imageView.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        applicationContext,
-                        R.drawable.dot_selected
-                    )
+        for (i in 0 until layoutIndicators.childCount) {
+            val dot = layoutIndicators.getChildAt(i) as? ImageView ?: continue
+            dot.setImageDrawable(
+                ContextCompat.getDrawable(
+                    applicationContext,
+                    if (i == index) R.drawable.indicator_active else R.drawable.indicator_inactive
                 )
-            } else {
-                imageView.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        applicationContext,
-                        R.drawable.dot_unselected
-                    )
-                )
-            }
+            )
         }
     }
 
-    private fun navigateToLogin() {
-        startActivity(Intent(this, Login::class.java))
-        finish()
+    /**
+     * Decision logic for where to go after onboarding.
+     * If user is already logged in (e.g. they came from Profile), just finish.
+     * Otherwise, go to Login.
+     */
+    private fun proceedToNext() {
+        val userPrefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        val token = userPrefs.getString("auth_token", null)
+
+        if (token != null) {
+            // User is already logged in, so we just go back to the app (MainActivity) 
+            // or close this activity if it was "Force shown" from profile.
+            if (intent.getBooleanExtra("forceShow", false)) {
+                finish()
+            } else {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+        } else {
+            // Not logged in, go to Login screen
+            startActivity(Intent(this, Login::class.java))
+            finish()
+        }
     }
 
     data class OnboardingItem(val image: Int, val title: String, val description: String)
@@ -165,7 +169,8 @@ class OnboardingActivity : AppCompatActivity() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnboardingViewHolder {
             return OnboardingViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.item_onboarding, parent, false)
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_onboarding, parent, false)
             )
         }
 
@@ -176,6 +181,6 @@ class OnboardingActivity : AppCompatActivity() {
             holder.tvDescription.text = item.description
         }
 
-        override fun getItemCount(): Int = items.size
+        override fun getItemCount() = items.size
     }
 }

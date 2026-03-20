@@ -16,7 +16,7 @@ data class CartResponse(
 )
 
 data class PlaceOrderRequest(
-    val payment_method: String, // "Cash" or "Stub"
+    val payment_method: String,
     val items: List<OrderItemRequest>
 )
 
@@ -67,7 +67,7 @@ interface ApiService {
   @GET("api/myCart")
   suspend fun getMyCart(
     @Header("Authorization") token: String
-  ): Response<List<FoodItem>> // Note: Depending on backend, might need a CartItem model
+  ): Response<List<FoodItem>>
 
   @POST("api/addToCart")
   suspend fun addToCart(
@@ -79,6 +79,13 @@ interface ApiService {
   suspend fun removeFromCart(
     @Header("Authorization") token: String,
     @Path("cartItemId") cartItemId: Int
+  ): Response<CartResponse>
+
+  // NEW: Clear all items for a specific stall in the cart
+  @DELETE("api/clearStallCart/{stallId}")
+  suspend fun clearStallCart(
+    @Header("Authorization") token: String,
+    @Path("stallId") stallId: Int
   ): Response<CartResponse>
 
   @POST("api/placeOrder")

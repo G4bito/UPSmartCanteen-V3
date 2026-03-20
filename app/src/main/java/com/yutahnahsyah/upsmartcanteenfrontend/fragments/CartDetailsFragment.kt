@@ -25,10 +25,12 @@ import java.util.Locale
 class CartDetailsFragment : Fragment() {
 
     private val args: CartDetailsFragmentArgs by navArgs()
-    private lateinit var tvSubtotal: TextView
-    private lateinit var tvTotal: TextView
-    private lateinit var rvCartItems: RecyclerView
-    private lateinit var adapter: CartItemAdapter
+    private var tvSubtotal: TextView? = null
+    private var tvTotal: TextView? = null
+    private var tvTotalBottom: TextView? = null
+    private var tvItemCount: TextView? = null
+    private var rvCartItems: RecyclerView? = null
+    private var adapter: CartItemAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,30 +42,38 @@ class CartDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        val btnBack = view.findViewById<View>(R.id.btnBack)
         val tvStoreNameHeader = view.findViewById<TextView>(R.id.tvStoreNameHeader)
+        val btnAddMore = view.findViewById<View>(R.id.btnAddMore)
+        val btnConfirmPayment = view.findViewById<MaterialButton>(R.id.btnConfirmPayment)
+        
         rvCartItems = view.findViewById(R.id.rvCartItems)
         tvSubtotal = view.findViewById(R.id.tvSubtotal)
         tvTotal = view.findViewById(R.id.tvTotal)
-        val btnConfirmPayment = view.findViewById<MaterialButton>(R.id.btnConfirmPayment)
+        tvTotalBottom = view.findViewById(R.id.tvTotalBottom)
+        tvItemCount = view.findViewById(R.id.tvItemCount)
 
-        tvStoreNameHeader.text = args.storeName
+        tvStoreNameHeader?.text = args.storeName
 
-        toolbar.setNavigationOnClickListener {
+        btnBack?.setOnClickListener {
             findNavController().navigateUp()
         }
 
-        rvCartItems.layoutManager = LinearLayoutManager(requireContext())
+        // Add more items takes you back to the same store
+        btnAddMore?.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        rvCartItems?.layoutManager = LinearLayoutManager(requireContext())
 
         adapter = CartItemAdapter(emptyList()) {
-            // Re-calculate totals when quantity changes
-            updateTotals(adapter.getItems())
+            updateTotals(adapter?.getItems() ?: emptyList())
         }
-        rvCartItems.adapter = adapter
+        rvCartItems?.adapter = adapter
 
         fetchCartItems()
 
-        btnConfirmPayment.setOnClickListener {
+        btnConfirmPayment?.setOnClickListener {
             val action = CartDetailsFragmentDirections.actionNavCartDetailsToNavPayment()
             findNavController().navigate(action)
         }
@@ -80,24 +90,26 @@ class CartDetailsFragment : Fragment() {
                 val response = RetrofitClient.instance.getMyCart("Bearer $token")
                 if (response.isSuccessful) {
                     val allItems = response.body() ?: emptyList()
-                    // Filter items only for this specific stall
                     val stallItems = allItems.filter { it.stall_name == args.storeName }
                     
-                    adapter.updateData(stallItems)
+                    adapter?.updateData(stallItems)
                     updateTotals(stallItems)
                 } else {
-                    Log.e("CART_FETCH", "Error: ${response.code()}")
+                    Log.e("CART_DETAILS", "Error: ${response.code()}")
                 }
             } catch (e: Exception) {
-                Log.e("CART_FETCH", "Exception", e)
-                Toast.makeText(requireContext(), "Network error", Toast.LENGTH_SHORT).show()
+                Log.e("CART_DETAILS", "Exception", e)
             }
         }
     }
 
     private fun updateTotals(items: List<FoodItem>) {
         val total = items.sumOf { it.price }
-        tvSubtotal.text = String.format(Locale.getDefault(), "₱%.2f", total)
-        tvTotal.text = String.format(Locale.getDefault(), "₱%.2f", total)
+        val priceString = String.format(Locale.getDefault(), "₱%.2f", total)
+        
+        tvSubtotal?.text = priceString
+        tvTotal?.text = priceString
+        tvTotalBottom?.text = priceString
+        tvItemCount?.text = "${items.size} items"
     }
 }

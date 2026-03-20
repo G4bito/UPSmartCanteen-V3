@@ -3,8 +3,66 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@drawable/bg_onboarding_gradient">
 
+    <!-- Decorative top-right circle -->
+    <View
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="-60dp"
+        android:layout_marginEnd="-60dp"
+        android:alpha="0.05"
+        android:background="@drawable/bg_circle_plain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Decorative gold circle left -->
+    <View
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="-40dp"
+        android:layout_marginTop="120dp"
+        android:alpha="0.08"
+        android:background="@drawable/bg_bubble_gold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Decorative bottom-right circle -->
+    <View
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="-30dp"
+        android:layout_marginBottom="200dp"
+        android:alpha="0.05"
+        android:background="@drawable/bg_circle_plain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- Skip button (top right) -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/tvSkipTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#26FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="7dp"
+            android:text="Skip"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- ViewPager (full height above bottom panel) -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
@@ -12,44 +70,44 @@
         app:layout_constraintBottom_toTopOf="@+id/layoutBottom"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Bottom panel with glass background -->
     <LinearLayout
         android:id="@+id/layoutBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="36dp"
+        android:background="@drawable/bg_onboarding_bottom"
         app:layout_constraintBottom_toBottomOf="parent">
 
+        <!-- Dot indicators -->
         <LinearLayout
             android:id="@+id/layoutIndicators"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="24dp"
             android:orientation="horizontal" />
 
+        <!-- Next button (gold) -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnNext"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="32dp"
+            android:layout_height="54dp"
+            app:backgroundTint="#C9A84C"
             android:text="Next"
-            android:textColor="@color/white"
             android:textAllCaps="false"
-            android:textSize="16sp"
+            android:textColor="#0D3311"
+            android:textSize="15sp"
             android:textStyle="bold"
-            app:backgroundTint="#2D5016"
-            app:cornerRadius="12dp" />
-
-        <TextView
-            android:id="@+id/tvSkip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:padding="8dp"
-            android:text="Skip"
-            android:textColor="#999999"
-            android:textSize="14sp" />
+            android:letterSpacing="0.03"
+            app:cornerRadius="14dp"
+            app:icon="@drawable/ic_login"
+            app:iconGravity="textEnd"
+            app:iconTint="#0D3311" />
 
     </LinearLayout>
 
