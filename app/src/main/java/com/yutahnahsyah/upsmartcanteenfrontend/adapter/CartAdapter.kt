@@ -17,7 +17,6 @@ class CartAdapter(
 
   class CartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val name: TextView = view.findViewById(R.id.name)
-    val status: TextView = view.findViewById(R.id.status)
     val price: TextView = view.findViewById(R.id.price)
     val image1: ImageView = view.findViewById(R.id.imageRes1)
     val image2: ImageView = view.findViewById(R.id.imageRes2)
@@ -32,7 +31,6 @@ class CartAdapter(
   override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
     val item = items[position]
     holder.name.text = item.name
-    holder.status.text = item.status
     holder.price.text = "₱${item.price}"
     holder.image1.setImageResource(item.imageRes1)
     holder.image2.setImageResource(item.imageRes2)

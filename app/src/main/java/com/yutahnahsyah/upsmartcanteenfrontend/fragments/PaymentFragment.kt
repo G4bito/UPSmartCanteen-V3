@@ -19,8 +19,6 @@ class PaymentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // FIXED: The ID 'toolbar' in fragment_payment.xml is a CardView, not a Toolbar.
         // Using View to avoid ClassCastException and setOnClickListener instead of setNavigationOnClickListener.
         val btnBack = view.findViewById<View>(R.id.toolbar)
         btnBack?.setOnClickListener {

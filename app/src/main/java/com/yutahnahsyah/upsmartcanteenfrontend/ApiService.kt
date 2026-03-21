@@ -6,6 +6,12 @@ import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
+data class PlaceOrderRequest(
+    val stall_id: Int,
+    val payment_type: String,
+    val order_remarks: String? = ""
+)
+
 data class AddToCartRequest(
     val item_id: Int,
     val quantity: Int
@@ -15,14 +21,12 @@ data class CartResponse(
     val message: String
 )
 
-data class PlaceOrderRequest(
-    val payment_method: String,
-    val items: List<OrderItemRequest>
-)
-
-data class OrderItemRequest(
-    val item_id: Int,
-    val quantity: Int
+data class OrderResponse(
+    val order_id: Int,
+    val status: String,
+    val total_price: Double,
+    val order_date: String,
+    val stall_name_snapshot: String? = null
 )
 
 interface ApiService {
@@ -37,6 +41,7 @@ interface ApiService {
     @Header("Authorization") token: String
   ): Response<UserData>
 
+  // FIXED: Added missing editUserProfile method
   @PUT("api/editUser")
   suspend fun editUserProfile(
     @Header("Authorization") token: String,
@@ -75,13 +80,6 @@ interface ApiService {
     @Body request: AddToCartRequest
   ): Response<CartResponse>
 
-  @DELETE("api/removeFromCart/{cartItemId}")
-  suspend fun removeFromCart(
-    @Header("Authorization") token: String,
-    @Path("cartItemId") cartItemId: Int
-  ): Response<CartResponse>
-
-  // NEW: Clear all items for a specific stall in the cart
   @DELETE("api/clearStallCart/{stallId}")
   suspend fun clearStallCart(
     @Header("Authorization") token: String,
@@ -93,4 +91,9 @@ interface ApiService {
     @Header("Authorization") token: String,
     @Body request: PlaceOrderRequest
   ): Response<CartResponse>
+
+  @GET("api/myOrders")
+  suspend fun getMyOrders(
+    @Header("Authorization") token: String
+  ): Response<List<OrderResponse>>
 }

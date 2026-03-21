@@ -1,17 +1,25 @@
 package com.yutahnahsyah.upsmartcanteenfrontend.fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yutahnahsyah.upsmartcanteenfrontend.R
+import com.yutahnahsyah.upsmartcanteenfrontend.RetrofitClient
 import com.yutahnahsyah.upsmartcanteenfrontend.adapter.OrderHistoryAdapter
-import com.yutahnahsyah.upsmartcanteenfrontend.data.model.Order
+import kotlinx.coroutines.launch
 
 class HistoryFragment : Fragment() {
+
+    private lateinit var adapter: OrderHistoryAdapter
+    private var tvOrderCount: TextView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,17 +37,35 @@ class HistoryFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
+        tvOrderCount = view.findViewById(R.id.tvOrderCount)
         val rvHistory = view.findViewById<RecyclerView>(R.id.rvHistory)
         rvHistory.layoutManager = LinearLayoutManager(requireContext())
 
-        // Dummy data for order history
-        val orders = listOf(
-            Order("12345", "17 May 2024", "Completed", 150.00, "- 1x Fried Chicken\n- 1x Rice\n- 1x Coke"),
-            Order("12346", "16 May 2024", "Completed", 85.00, "- 1x Burger\n- 1x Fries"),
-            Order("12347", "15 May 2024", "Completed", 45.00, "- 1x Sisig Rice Bowl")
-        )
-
-        val adapter = OrderHistoryAdapter(orders)
+        adapter = OrderHistoryAdapter(emptyList())
         rvHistory.adapter = adapter
+
+        fetchOrderHistory()
+    }
+
+    private fun fetchOrderHistory() {
+        val sharedPref = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        val token = sharedPref.getString("auth_token", null)
+
+        if (token == null) return
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.instance.getMyOrders("Bearer $token")
+                if (response.isSuccessful) {
+                    val orders = response.body() ?: emptyList()
+                    adapter.updateData(orders)
+                    tvOrderCount?.text = "${orders.size} orders"
+                } else {
+                    Log.e("HISTORY_FETCH", "Error: ${response.code()}")
+                }
+            } catch (e: Exception) {
+                Log.e("HISTORY_FETCH", "Exception", e)
+            }
+        }
     }
 }

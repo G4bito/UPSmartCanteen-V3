@@ -89,6 +89,11 @@
         <action
             android:id="@+id/action_nav_cart_details_to_nav_payment"
             app:destination="@id/nav_payment" />
+        <action
+            android:id="@+id/action_nav_cart_details_to_nav_history"
+            app:destination="@id/nav_history"
+            app:popUpTo="@id/nav_cart"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

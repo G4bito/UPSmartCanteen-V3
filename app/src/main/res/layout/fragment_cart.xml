@@ -26,17 +26,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Title + subtitle -->
         <View
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginStart="-20dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="28dp"
             android:alpha="0.04"
             android:background="@drawable/bg_circle_plain"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Title + subtitle -->
         <LinearLayout
             android:id="@+id/titleBlock"
             android:layout_width="wrap_content"
@@ -53,17 +53,8 @@
                 android:layout_height="wrap_content"
                 android:text="All Carts"
                 android:textColor="#FFFFFF"
-                android:textSize="25sp"
+                android:textSize="30sp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvDeliverTo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Deliver to: Your Location"
-                android:textColor="#A8D5AA"
-                android:textSize="11sp"
-                android:layout_marginTop="2dp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

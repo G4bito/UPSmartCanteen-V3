@@ -31,5 +31,8 @@ data class FoodItem(
     val image_url: String?,
 
     @SerializedName("is_available")
-    val is_available: Boolean
+    val is_available: Boolean,
+
+    @SerializedName("quantity")
+    val quantity: Int = 1
 )

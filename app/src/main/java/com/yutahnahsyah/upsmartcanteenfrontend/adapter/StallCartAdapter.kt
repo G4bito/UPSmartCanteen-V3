@@ -22,7 +22,7 @@ class StallCartAdapter(
 
     class StallCartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val stallName: TextView = view.findViewById(R.id.name)
-        val status: TextView = view.findViewById(R.id.status)
+        val itemCount: TextView = view.findViewById(R.id.itemCount)
         val subtotal: TextView = view.findViewById(R.id.price)
         val itemsContainer: LinearLayout = view.findViewById(R.id.cartItems)
         val btnViewCart: MaterialButton = view.findViewById(R.id.btnViewCart)
@@ -36,7 +36,7 @@ class StallCartAdapter(
     override fun onBindViewHolder(holder: StallCartViewHolder, position: Int) {
         val stallCart = stallCarts[position]
         holder.stallName.text = stallCart.stallName
-        holder.status.text = "Deliver to: Your Location" // Or any other status
+        holder.itemCount.text = "${stallCart.items.size} items"
         holder.subtotal.text = String.format(Locale.getDefault(), "₱%.2f", stallCart.subtotal)
 
         // Clear and add item images

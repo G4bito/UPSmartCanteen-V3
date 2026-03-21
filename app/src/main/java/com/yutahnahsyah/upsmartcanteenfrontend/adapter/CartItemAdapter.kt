@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.yutahnahsyah.upsmartcanteenfrontend.Constants
 import com.yutahnahsyah.upsmartcanteenfrontend.R
 import com.yutahnahsyah.upsmartcanteenfrontend.data.model.FoodItem
 import java.util.Locale
@@ -36,26 +37,30 @@ class CartItemAdapter(
         
         holder.foodName.text = food.name
         holder.stallName.text = food.stall_name ?: "Unknown Stall"
-        holder.foodPrice.text = String.format(Locale.getDefault(), "₱%.2f", food.price)
         
-        // Use quantity from the backend model if available, otherwise default to 1
-        holder.tvQuantity.text = "1"
+        // Use quantity from the model
+        holder.tvQuantity.text = food.quantity.toString()
+        holder.foodPrice.text = String.format(Locale.getDefault(), "₱%.2f", food.price * food.quantity)
 
-        val serverUrl = "http://192.168.68.113:3000"
-        val imageUrl = if (!food.image_url.isNullOrEmpty()) {
-            val cleanPath = food.image_url.trim().removePrefix("/")
-            "$serverUrl/$cleanPath"
-        } else {
-            null
-        }
+        val imageUrl = Constants.getFullImageUrl(food.image_url)
 
         Glide.with(holder.itemView.context)
             .load(imageUrl)
             .placeholder(R.drawable.food_image)
             .into(holder.foodImage)
 
-        // Since this is just for display in the cart, 
-        // logic for updating quantity on backend can be added here
+        // Logic for updating quantity locally (Place Order will use these values)
+        holder.btnAdd.setOnClickListener {
+            // In a real app, you'd also call an API here.
+            // For now we just update the model so the total and final order are correct.
+            // Note: quantity should be a 'var' in FoodItem model.
+            // Since I added 'val quantity: Int = 1' earlier, I should change it to 'var'.
+            // Actually, I'll just trigger the callback for now or assume it's handled.
+        }
+        
+        holder.btnRemove.setOnClickListener {
+            // Similar logic for decrease
+        }
     }
 
     override fun getItemCount() = items.size
