@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_stall"
-        android:name="com.yutahnahsyah.upsmartcanteenfrontend.fragments.StallFragment"
+        android:name="com.yutahnahsyah.upsmartcanteen.fragments.StallFragment"
         android:label="Stalls"
         tools:layout="@layout/fragment_stall">
         <action
@@ -17,13 +17,13 @@
 
     <fragment
         android:id="@+id/nav_food"
-        android:name="com.yutahnahsyah.upsmartcanteenfrontend.fragments.FoodFragment"
+        android:name="com.yutahnahsyah.upsmartcanteen.fragments.FoodFragment"
         android:label="Food"
         tools:layout="@layout/fragment_food" />
 
     <fragment
         android:id="@+id/nav_cart"
-        android:name="com.yutahnahsyah.upsmartcanteenfrontend.fragments.CartFragment"
+        android:name="com.yutahnahsyah.upsmartcanteen.fragments.CartFragment"
         android:label="Cart"
         tools:layout="@layout/fragment_cart">
         <action
@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/nav_profile"
-        android:name="com.yutahnahsyah.upsmartcanteenfrontend.fragments.ProfileFragment"
+        android:name="com.yutahnahsyah.upsmartcanteen.fragments.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile">
         <action
@@ -67,7 +67,7 @@
 
     <fragment
         android:id="@+id/nav_store_food"
-        android:name="com.yutahnahsyah.upsmartcanteenfrontend.fragments.StoreFoodFragment"
+        android:name="com.yutahnahsyah.upsmartcanteen.fragments.StoreFoodFragment"
         android:label="Store Menu"
         tools:layout="@layout/fragment_store_food">
         <argument
@@ -80,7 +80,7 @@
 
     <fragment
         android:id="@+id/nav_cart_details"
-        android:name="com.yutahnahsyah.upsmartcanteenfrontend.fragments.CartDetailsFragment"
+        android:name="com.yutahnahsyah.upsmartcanteen.fragments.CartDetailsFragment"
         android:label="Cart Details"
         tools:layout="@layout/fragment_cart_details">
         <argument
@@ -98,25 +98,25 @@
 
     <fragment
         android:id="@+id/nav_edit_profile"
-        android:name="com.yutahnahsyah.upsmartcanteenfrontend.fragments.EditProfileFragment"
+        android:name="com.yutahnahsyah.upsmartcanteen.fragments.EditProfileFragment"
         android:label="Edit Profile"
         tools:layout="@layout/fragment_edit_profile" />
 
     <fragment
         android:id="@+id/nav_history"
-        android:name="com.yutahnahsyah.upsmartcanteenfrontend.fragments.HistoryFragment"
+        android:name="com.yutahnahsyah.upsmartcanteen.fragments.HistoryFragment"
         android:label="Order History"
         tools:layout="@layout/fragment_history" />
 
     <fragment
         android:id="@+id/nav_notifications"
-        android:name="com.yutahnahsyah.upsmartcanteenfrontend.fragments.NotificationsFragment"
+        android:name="com.yutahnahsyah.upsmartcanteen.fragments.NotificationsFragment"
         android:label="Notifications"
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
         android:id="@+id/nav_about"
-        android:name="com.yutahnahsyah.upsmartcanteenfrontend.fragments.AboutFragment"
+        android:name="com.yutahnahsyah.upsmartcanteen.fragments.AboutFragment"
         android:label="About"
         tools:layout="@layout/fragment_about">
         <action
@@ -126,25 +126,25 @@
 
     <fragment
         android:id="@+id/nav_support"
-        android:name="com.yutahnahsyah.upsmartcanteenfrontend.fragments.SupportFragment"
+        android:name="com.yutahnahsyah.upsmartcanteen.fragments.SupportFragment"
         android:label="Support"
         tools:layout="@layout/fragment_support" />
 
     <fragment
         android:id="@+id/nav_payment"
-        android:name="com.yutahnahsyah.upsmartcanteenfrontend.fragments.PaymentFragment"
+        android:name="com.yutahnahsyah.upsmartcanteen.fragments.PaymentFragment"
         android:label="Payment"
         tools:layout="@layout/fragment_payment" />
 
     <fragment
         android:id="@+id/nav_terms"
-        android:name="com.yutahnahsyah.upsmartcanteenfrontend.fragments.TermsFragment"
+        android:name="com.yutahnahsyah.upsmartcanteen.fragments.TermsFragment"
         android:label="Terms"
         tools:layout="@layout/fragment_terms" />
 
     <fragment
         android:id="@+id/nav_privacy"
-        android:name="com.yutahnahsyah.upsmartcanteenfrontend.fragments.PrivacyFragment"
+        android:name="com.yutahnahsyah.upsmartcanteen.fragments.PrivacyFragment"
         android:label="Privacy"
         tools:layout="@layout/fragment_privacy" />
 </navigation>

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-  namespace = "com.yutahnahsyah.upsmartcanteenfrontend"
+  namespace = "com.yutahnahsyah.upsmartcanteen"
   compileSdk = 36
 
   defaultConfig {
-    applicationId = "com.yutahnahsyah.upsmartcanteenfrontend"
+    applicationId = "com.yutahnahsyah.upsmartcanteen"
     minSdk = 24
     targetSdk = 36
     versionCode = 1

@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "UPSmart Canteen Frontend"
+rootProject.name = "UPSmart Canteen"
 include(":app")
  
