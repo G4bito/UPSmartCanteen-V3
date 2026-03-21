@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.yutahnahsyah.upsmartcanteenfrontend.Constants
 import com.yutahnahsyah.upsmartcanteenfrontend.OnboardingActivity
 import com.yutahnahsyah.upsmartcanteenfrontend.R
 import com.yutahnahsyah.upsmartcanteenfrontend.RetrofitClient
@@ -110,8 +111,7 @@ class ProfileFragment : Fragment() {
                         userEmailTv?.text = user.email
 
                         if (!user.profile_picture_url.isNullOrEmpty()) {
-                            val cleanPath = user.profile_picture_url.trim().removePrefix("/")
-                            val fullImageUrl = "http://192.168.18.41:3000/$cleanPath"
+                            val fullImageUrl = Constants.getFullImageUrl(user.profile_picture_url)
 
                             profileIv?.let {
                                 Glide.with(this@ProfileFragment)

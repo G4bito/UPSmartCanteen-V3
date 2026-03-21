@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.yutahnahsyah.upsmartcanteenfrontend.AddToCartRequest
+import com.yutahnahsyah.upsmartcanteenfrontend.Constants
 import com.yutahnahsyah.upsmartcanteenfrontend.R
 import com.yutahnahsyah.upsmartcanteenfrontend.RetrofitClient
 import com.yutahnahsyah.upsmartcanteenfrontend.adapter.FoodAdapter
@@ -135,13 +136,7 @@ class StoreFoodFragment : Fragment() {
         foodPrice.text = String.format(Locale.getDefault(), "₱%.2f", food.price)
         tvSubtotal.text = String.format(Locale.getDefault(), "₱%.2f", food.price)
 
-        val serverUrl = "http://192.168.18.41:3000"
-        val imageUrl = if (!food.image_url.isNullOrEmpty()) {
-            val cleanPath = food.image_url!!.trim().removePrefix("/")
-            "$serverUrl/$cleanPath"
-        } else {
-            null
-        }
+        val imageUrl = Constants.getFullImageUrl(food.image_url)
 
         Glide.with(this)
             .load(imageUrl)

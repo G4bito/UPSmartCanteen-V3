@@ -6,9 +6,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-  // CHANGE THIS IP TO MATCH YOUR LAPTOP'S CURRENT IP
-  const val BASE_URL = "http://192.168.18.41:3000/"
-
   private val logging = HttpLoggingInterceptor().apply {
     level = HttpLoggingInterceptor.Level.BODY
   }
@@ -19,7 +16,7 @@ object RetrofitClient {
 
   val instance: ApiService by lazy {
     val retrofit = Retrofit.Builder()
-      .baseUrl(BASE_URL)
+      .baseUrl(Constants.BASE_URL)
       .client(httpClient)
       .addConverterFactory(GsonConverterFactory.create())
       .build()

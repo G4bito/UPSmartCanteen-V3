@@ -114,7 +114,7 @@ class EditProfileFragment : Fragment() {
 
                     if (!user.profile_picture_url.isNullOrEmpty()) {
                         val cleanPath = user.profile_picture_url.trim().removePrefix("/")
-                        val fullImageUrl = "http://192.168.18.41:3000/$cleanPath"
+                        val fullImageUrl = "http://192.168.68.113:3000/$cleanPath"
                         profileImageView?.let {
                             Glide.with(this@EditProfileFragment)
                                 .load(fullImageUrl)

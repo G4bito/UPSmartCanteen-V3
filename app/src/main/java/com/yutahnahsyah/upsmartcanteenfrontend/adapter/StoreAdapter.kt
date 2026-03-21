@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.yutahnahsyah.upsmartcanteenfrontend.Constants
 import com.yutahnahsyah.upsmartcanteenfrontend.R
 import com.yutahnahsyah.upsmartcanteenfrontend.data.model.Stall
 
@@ -33,13 +34,7 @@ class StoreAdapter(
     holder.name.text = stall.stall_name
     holder.category.text = stall.location // Using location as the subtitle/category
 
-    val serverUrl = "http://192.168.68.113:3000"
-    val imageUrl = if (!stall.stall_image_url.isNullOrEmpty()) {
-        val cleanPath = stall.stall_image_url.trim().removePrefix("/")
-        "$serverUrl/$cleanPath"
-    } else {
-        null
-    }
+    val imageUrl = Constants.getFullImageUrl(stall.stall_image_url)
 
     Glide.with(holder.itemView.context)
         .load(imageUrl)

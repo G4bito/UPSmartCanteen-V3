@@ -41,7 +41,7 @@ class CartItemAdapter(
         // Use quantity from the backend model if available, otherwise default to 1
         holder.tvQuantity.text = "1"
 
-        val serverUrl = "http://192.168.18.41:3000"
+        val serverUrl = "http://192.168.68.113:3000"
         val imageUrl = if (!food.image_url.isNullOrEmpty()) {
             val cleanPath = food.image_url.trim().removePrefix("/")
             "$serverUrl/$cleanPath"

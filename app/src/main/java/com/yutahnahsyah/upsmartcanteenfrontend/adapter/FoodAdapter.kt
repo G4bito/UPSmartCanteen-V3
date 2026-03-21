@@ -10,6 +10,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.yutahnahsyah.upsmartcanteenfrontend.Constants
 import com.yutahnahsyah.upsmartcanteenfrontend.R
 import com.yutahnahsyah.upsmartcanteenfrontend.data.model.FoodItem
 import java.util.Locale
@@ -71,14 +72,8 @@ class FoodAdapter(
             holder.btnAddToCart.alpha = 0.5f
         }
 
-        // Load image
-        val serverUrl = "http://192.168.18.41:3000"
-        val imageUrl = if (!food.image_url.isNullOrEmpty()) {
-            val cleanPath = food.image_url.trim().removePrefix("/")
-            "$serverUrl/$cleanPath"
-        } else {
-            null
-        }
+        // Load image using Constants helper
+        val imageUrl = Constants.getFullImageUrl(food.image_url)
 
         Glide.with(ctx)
             .load(imageUrl)

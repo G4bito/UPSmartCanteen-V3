@@ -13,7 +13,7 @@
         android:background="@drawable/bg_header_deep"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:paddingBottom="1dp">
+        android:paddingBottom=".5dp">
 
         <!-- Decorative circles -->
         <View

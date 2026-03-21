@@ -123,7 +123,7 @@ class FoodFragment : Fragment() {
         foodPrice.text = String.format(Locale.getDefault(), "₱%.2f", food.price)
         tvSubtotal.text = String.format(Locale.getDefault(), "₱%.2f", food.price)
 
-        val serverUrl = "http://192.168.18.41:3000"
+        val serverUrl = "http://192.168.68.113:3000"
         val imageUrl = if (!food.image_url.isNullOrEmpty()) {
             val cleanPath = food.image_url.trim().removePrefix("/")
             "$serverUrl/$cleanPath"

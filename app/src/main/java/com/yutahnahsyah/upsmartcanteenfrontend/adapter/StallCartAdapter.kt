@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.imageview.ShapeableImageView
+import com.yutahnahsyah.upsmartcanteenfrontend.Constants
 import com.yutahnahsyah.upsmartcanteenfrontend.R
 import com.yutahnahsyah.upsmartcanteenfrontend.data.model.StallCart
 import java.util.Locale
@@ -45,13 +46,7 @@ class StallCartAdapter(
         stallCart.items.take(3).forEach { item ->
             val imageView = inflater.inflate(R.layout.view_cart_item_image, holder.itemsContainer, false) as ShapeableImageView
             
-            val serverUrl = "http://192.168.18.41:3000"
-            val imageUrl = if (!item.image_url.isNullOrEmpty()) {
-                val cleanPath = item.image_url.trim().removePrefix("/")
-                "$serverUrl/$cleanPath"
-            } else {
-                null
-            }
+            val imageUrl = Constants.getFullImageUrl(item.image_url)
 
             Glide.with(holder.itemView.context)
                 .load(imageUrl)
