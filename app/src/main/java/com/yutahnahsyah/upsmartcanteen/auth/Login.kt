@@ -17,6 +17,7 @@ import com.yutahnahsyah.upsmartcanteen.R
 import com.yutahnahsyah.upsmartcanteen.RetrofitClient
 import com.yutahnahsyah.upsmartcanteen.UserRequest
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class Login : BaseActivity() {
 
@@ -94,7 +95,12 @@ class Login : BaseActivity() {
             finish()
           }
         } else {
-          val errorMsg = "Invalid Credentials"
+          val errorBody = response.errorBody()?.string()
+          val errorMsg = try {
+            JSONObject(errorBody ?: "").getString("message")
+          } catch (e: Exception) {
+            "Login failed. Please try again."
+          }
           Toast.makeText(this@Login, errorMsg, Toast.LENGTH_SHORT).show()
         }
       } catch (e: Exception) {
