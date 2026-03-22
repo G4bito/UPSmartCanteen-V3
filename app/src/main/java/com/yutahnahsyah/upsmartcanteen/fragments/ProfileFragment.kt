@@ -149,8 +149,7 @@ class ProfileFragment : Fragment() {
                 val response = RetrofitClient.instance.getMyOrders("Bearer $token")
                 if (response.isSuccessful) {
                     val orders = response.body() ?: emptyList()
-                    
-                    // Count only successfully completed orders (Status: picked_up or completed)
+
                     val successfulOrders = orders.filter { 
                         it.status.equals("completed", ignoreCase = true) || 
                         it.status.equals("picked_up", ignoreCase = true)

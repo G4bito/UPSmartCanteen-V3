@@ -1,122 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@android:color/white"
     android:paddingHorizontal="16dp"
-    android:paddingVertical="12dp"
-    android:background="@android:color/white">
+    android:paddingVertical="0dp">
 
-    <!-- Food image: rounded square via CardView -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/imageCard"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="#F2F6F2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+  <androidx.cardview.widget.CardView
+      android:id="@+id/imageCard"
+      android:layout_width="56dp"
+      android:layout_height="56dp"
+      app:cardBackgroundColor="#F2F6F2"
+      app:cardCornerRadius="12dp"
+      app:cardElevation="0dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/ivFoodImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/food_image" />
-    </androidx.cardview.widget.CardView>
+    <ImageView
+        android:id="@+id/ivFoodImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/food_image" />
+  </androidx.cardview.widget.CardView>
 
-    <!-- Food name -->
+  <TextView
+      android:id="@+id/tvFoodName"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="12dp"
+      android:layout_marginTop="2dp"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:text="Food Name"
+      android:textColor="#1A3E1A"
+      android:textSize="13sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toStartOf="@+id/tvPrice"
+      app:layout_constraintStart_toEndOf="@id/imageCard"
+      app:layout_constraintTop_toTopOf="@id/imageCard" />
+
+  <TextView
+      android:id="@+id/tvStallName"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="2dp"
+      android:text="Stall Name"
+      android:textColor="#90A4AE"
+      android:textSize="11sp"
+      app:layout_constraintEnd_toStartOf="@+id/tvPrice"
+      app:layout_constraintStart_toStartOf="@id/tvFoodName"
+      app:layout_constraintTop_toBottomOf="@id/tvFoodName" />
+
+  <TextView
+      android:id="@+id/tvPrice"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="₱0.00"
+      android:textColor="#1B5E20"
+      android:textSize="14sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@id/tvFoodName" />
+
+  <ImageView
+      android:id="@+id/btnDelete"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_marginTop="20dp"
+      android:layout_marginEnd="0dp"
+      android:src="@drawable/ic_delete"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/tvPrice"
+      app:tint="#FF0000" />
+
+  <LinearLayout
+      android:id="@+id/quantityRow"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:background="@drawable/bg_quantity_control"
+      android:gravity="center_vertical"
+      android:orientation="horizontal"
+      app:layout_constraintStart_toStartOf="@id/tvFoodName"
+      app:layout_constraintTop_toBottomOf="@id/tvStallName">
+
+    <ImageView
+        android:id="@+id/btnRemove"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:padding="6dp"
+        android:src="@drawable/ic_minus"
+        app:tint="#2E7D32" />
+
     <TextView
-        android:id="@+id/tvFoodName"
-        android:layout_width="0dp"
+        android:id="@+id/tvQuantity"
+        android:layout_width="32dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="2dp"
-        android:text="Food Name"
+        android:gravity="center"
+        android:text="1"
         android:textColor="#1A3E1A"
         android:textSize="13sp"
-        android:textStyle="bold"
-        android:maxLines="1"
-        android:ellipsize="end"
-        app:layout_constraintEnd_toStartOf="@+id/tvPrice"
-        app:layout_constraintStart_toEndOf="@id/imageCard"
-        app:layout_constraintTop_toTopOf="@id/imageCard" />
+        android:textStyle="bold" />
 
-    <!-- Stall name -->
-    <TextView
-        android:id="@+id/tvStallName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:text="Stall Name"
-        android:textColor="#90A4AE"
-        android:textSize="11sp"
-        app:layout_constraintEnd_toStartOf="@+id/tvPrice"
-        app:layout_constraintStart_toStartOf="@id/tvFoodName"
-        app:layout_constraintTop_toBottomOf="@id/tvFoodName" />
+    <ImageView
+        android:id="@+id/btnAdd"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:padding="6dp"
+        android:src="@drawable/ic_plus"
+        app:tint="#2E7D32" />
+  </LinearLayout>
 
-    <!-- Price -->
-    <TextView
-        android:id="@+id/tvPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:text="₱0.00"
-        android:textColor="#1B5E20"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvFoodName" />
-
-    <!-- Quantity controls -->
-    <LinearLayout
-        android:id="@+id/quantityRow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bg_quantity_control"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="@id/tvFoodName"
-        app:layout_constraintTop_toBottomOf="@id/tvStallName">
-
-        <ImageView
-            android:id="@+id/btnRemove"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:padding="6dp"
-            android:src="@drawable/ic_minus"
-            app:tint="#2E7D32" />
-
-        <TextView
-            android:id="@+id/tvQuantity"
-            android:layout_width="32dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="1"
-            android:textColor="#1A3E1A"
-            android:textSize="13sp"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/btnAdd"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:padding="6dp"
-            android:src="@drawable/ic_plus"
-            app:tint="#2E7D32" />
-    </LinearLayout>
-
-    <!-- Divider -->
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="12dp"
-        android:background="#F0F4F0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageCard" />
+  <!-- Divider now below quantityRow -->
+  <View
+      android:layout_width="0dp"
+      android:layout_height="1dp"
+      android:layout_marginTop="12dp"
+      android:background="#F0F4F0"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/quantityRow" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

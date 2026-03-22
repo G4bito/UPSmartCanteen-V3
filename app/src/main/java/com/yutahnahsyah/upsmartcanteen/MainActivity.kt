@@ -1,10 +1,14 @@
 package com.yutahnahsyah.upsmartcanteen
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -34,12 +38,53 @@ class MainActivity : BaseActivity() {
         R.id.nav_cart_details -> bottomNav.visibility = View.GONE
         else -> bottomNav.visibility = View.VISIBLE
       }
+
+      // Sync bottom nav highlight with current destination
+      when (destination.id) {
+        R.id.nav_stall,
+        R.id.nav_store_food ->
+          bottomNav.menu.findItem(R.id.nav_stall)?.isChecked = true
+
+        R.id.nav_food ->
+          bottomNav.menu.findItem(R.id.nav_food)?.isChecked = true
+
+        R.id.nav_cart,
+        R.id.nav_cart_details ->
+          bottomNav.menu.findItem(R.id.nav_cart)?.isChecked = true
+
+        R.id.nav_profile,
+        R.id.nav_edit_profile,
+        R.id.nav_history,
+        R.id.nav_payment,
+        R.id.nav_notifications,
+        R.id.nav_about,
+        R.id.nav_support,
+        R.id.nav_terms,
+        R.id.nav_privacy ->
+          bottomNav.menu.findItem(R.id.nav_profile)?.isChecked = true
+      }
+    }
+
+    requestNotificationPermission()
+  }
+
+  private fun requestNotificationPermission() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      if (ContextCompat.checkSelfPermission(
+          this, Manifest.permission.POST_NOTIFICATIONS
+        ) != PackageManager.PERMISSION_GRANTED
+      ) {
+        ActivityCompat.requestPermissions(
+          this,
+          arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+          1001
+        )
+      }
     }
   }
 
   override fun onResume() {
     super.onResume()
-
     startSessionCheck()
   }
 

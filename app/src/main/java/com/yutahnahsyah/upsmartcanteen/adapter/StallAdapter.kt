@@ -29,37 +29,34 @@ class StallAdapter(
         return StallViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: StallViewHolder, position: Int) {
-        val stall = stalls[position]
+  override fun onBindViewHolder(holder: StallViewHolder, position: Int) {
+    val stall = stalls[position]
 
-        // Set text data from PostgreSQL
-        holder.tvStallName.text = stall.stall_name
-        holder.tvLocation.text = stall.location
+    holder.tvStallName.text = stall.stall_name
+    holder.tvLocation.text = stall.location
 
-        // Business logic for status
-        if (stall.is_active) {
-            holder.tvStatus.text = "Open"
-            holder.tvStatus.setTextColor(holder.itemView.context.getColor(android.R.color.holo_green_dark))
-        } else {
-            holder.tvStatus.text = "Closed"
-            holder.tvStatus.setTextColor(holder.itemView.context.getColor(android.R.color.holo_red_dark))
-        }
-
-        // Image Loading Logic using Constants helper
-        val imageUrl = Constants.getFullImageUrl(stall.stall_image_url)
-
-        Glide.with(holder.itemView.context)
-            .load(imageUrl)
-            .placeholder(R.drawable.food_image) // Replace with your actual placeholder name if different
-            .error(R.drawable.food_image)
-            .centerCrop()
-            .into(holder.ivStallImage)
-
-        // IMPORTANT: This handles the click to "Enter" the stall and see its food
-        holder.itemView.setOnClickListener {
-            onStallClick(stall)
-        }
+    // is_active is already filtered by the API — only active stalls show here
+    // is_open controls whether the stall is accepting orders
+    if (stall.is_open) {
+      holder.tvStatus.text = "Open"
+      holder.tvStatus.setTextColor(holder.itemView.context.getColor(android.R.color.holo_green_dark))
+    } else {
+      holder.tvStatus.text = "Closed"
+      holder.tvStatus.setTextColor(holder.itemView.context.getColor(android.R.color.holo_red_dark))
     }
+
+    val imageUrl = Constants.getFullImageUrl(stall.stall_image_url)
+    Glide.with(holder.itemView.context)
+      .load(imageUrl)
+      .placeholder(R.drawable.food_image)
+      .error(R.drawable.food_image)
+      .centerCrop()
+      .into(holder.ivStallImage)
+
+    holder.itemView.setOnClickListener {
+      onStallClick(stall)
+    }
+  }
 
     override fun getItemCount(): Int = stalls.size
 }

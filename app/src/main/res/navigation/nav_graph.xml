@@ -5,146 +5,150 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/nav_stall">
 
-    <fragment
-        android:id="@+id/nav_stall"
-        android:name="com.yutahnahsyah.upsmartcanteen.fragments.StallFragment"
-        android:label="Stalls"
-        tools:layout="@layout/fragment_stall">
-        <action
-            android:id="@+id/action_nav_stall_to_nav_store_food"
-            app:destination="@id/nav_store_food" />
-    </fragment>
+  <fragment
+      android:id="@+id/nav_stall"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.StallFragment"
+      android:label="Stalls"
+      tools:layout="@layout/fragment_stall">
+    <action
+        android:id="@+id/action_nav_stall_to_nav_store_food"
+        app:destination="@id/nav_store_food" />
+  </fragment>
 
-    <fragment
-        android:id="@+id/nav_food"
-        android:name="com.yutahnahsyah.upsmartcanteen.fragments.FoodFragment"
-        android:label="Food"
-        tools:layout="@layout/fragment_food" />
+  <fragment
+      android:id="@+id/nav_food"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.FoodFragment"
+      android:label="Food"
+      tools:layout="@layout/fragment_food" />
 
-    <fragment
-        android:id="@+id/nav_cart"
-        android:name="com.yutahnahsyah.upsmartcanteen.fragments.CartFragment"
-        android:label="Cart"
-        tools:layout="@layout/fragment_cart">
-        <action
-            android:id="@+id/action_nav_cart_to_nav_cart_details"
-            app:destination="@id/nav_cart_details" />
-        <action
-            android:id="@+id/action_nav_cart_to_nav_store_food"
-            app:destination="@id/nav_store_food" />
-    </fragment>
+  <fragment
+      android:id="@+id/nav_cart"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.CartFragment"
+      android:label="Cart"
+      tools:layout="@layout/fragment_cart">
+    <action
+        android:id="@+id/action_nav_cart_to_nav_cart_details"
+        app:destination="@id/nav_cart_details" />
+    <action
+        android:id="@+id/action_nav_cart_to_nav_store_food"
+        app:destination="@id/nav_store_food" />
+  </fragment>
 
-    <fragment
-        android:id="@+id/nav_profile"
-        android:name="com.yutahnahsyah.upsmartcanteen.fragments.ProfileFragment"
-        android:label="Profile"
-        tools:layout="@layout/fragment_profile">
-        <action
-            android:id="@+id/action_nav_profile_to_nav_edit_profile"
-            app:destination="@id/nav_edit_profile" />
-        <action
-            android:id="@+id/action_nav_profile_to_nav_history"
-            app:destination="@id/nav_history" />
-        <action
-            android:id="@+id/action_nav_profile_to_nav_notifications"
-            app:destination="@id/nav_notifications" />
-        <action
-            android:id="@+id/action_nav_profile_to_nav_about"
-            app:destination="@id/nav_about" />
-        <action
-            android:id="@+id/action_nav_profile_to_nav_support"
-            app:destination="@id/nav_support" />
-        <action
-            android:id="@+id/action_nav_profile_to_nav_payment"
-            app:destination="@id/nav_payment" />
-        <action
-            android:id="@+id/action_nav_profile_to_nav_terms"
-            app:destination="@id/nav_terms" />
-        <action
-            android:id="@+id/action_nav_profile_to_nav_privacy"
-            app:destination="@id/nav_privacy" />
-    </fragment>
+  <fragment
+      android:id="@+id/nav_profile"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.ProfileFragment"
+      android:label="Profile"
+      tools:layout="@layout/fragment_profile">
+    <action
+        android:id="@+id/action_nav_profile_to_nav_edit_profile"
+        app:destination="@id/nav_edit_profile" />
+    <action
+        android:id="@+id/action_nav_profile_to_nav_history"
+        app:destination="@id/nav_history" />
+    <action
+        android:id="@+id/action_nav_profile_to_nav_notifications"
+        app:destination="@id/nav_notifications" />
+    <action
+        android:id="@+id/action_nav_profile_to_nav_about"
+        app:destination="@id/nav_about" />
+    <action
+        android:id="@+id/action_nav_profile_to_nav_support"
+        app:destination="@id/nav_support" />
+    <action
+        android:id="@+id/action_nav_profile_to_nav_payment"
+        app:destination="@id/nav_payment" />
+    <action
+        android:id="@+id/action_nav_profile_to_nav_terms"
+        app:destination="@id/nav_terms" />
+    <action
+        android:id="@+id/action_nav_profile_to_nav_privacy"
+        app:destination="@id/nav_privacy" />
+  </fragment>
 
-    <fragment
-        android:id="@+id/nav_store_food"
-        android:name="com.yutahnahsyah.upsmartcanteen.fragments.StoreFoodFragment"
-        android:label="Store Menu"
-        tools:layout="@layout/fragment_store_food">
-        <argument
-            android:name="storeName"
-            app:argType="string" />
-        <argument
-            android:name="stallId"
-            app:argType="integer" />
-    </fragment>
+  <fragment
+      android:id="@+id/nav_store_food"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.StoreFoodFragment"
+      android:label="Store Menu"
+      tools:layout="@layout/fragment_store_food">
+    <argument
+        android:name="storeName"
+        app:argType="string" />
+    <argument
+        android:name="stallId"
+        app:argType="integer" />
+  </fragment>
 
-    <fragment
-        android:id="@+id/nav_cart_details"
-        android:name="com.yutahnahsyah.upsmartcanteen.fragments.CartDetailsFragment"
-        android:label="Cart Details"
-        tools:layout="@layout/fragment_cart_details">
-        <argument
-            android:name="storeName"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_nav_cart_details_to_nav_payment"
-            app:destination="@id/nav_payment" />
-        <action
-            android:id="@+id/action_nav_cart_details_to_nav_history"
-            app:destination="@id/nav_history"
-            app:popUpTo="@id/nav_cart"
-            app:popUpToInclusive="true" />
-    </fragment>
+  <fragment
+      android:id="@+id/nav_cart_details"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.CartDetailsFragment"
+      android:label="Cart Details"
+      tools:layout="@layout/fragment_cart_details">
+    <argument
+        android:name="storeName"
+        app:argType="string" />
+    <action
+        android:id="@+id/action_nav_cart_details_to_nav_store_food"
+        app:destination="@id/nav_store_food" />
+    <action
+        android:id="@+id/action_nav_cart_details_to_nav_payment"
+        app:destination="@id/nav_payment" />
+    <action
+        android:id="@+id/action_nav_cart_details_to_nav_history"
+        app:destination="@id/nav_history"
+        app:popUpTo="@id/nav_cart"
+        app:popUpToInclusive="true" />
+  </fragment>
 
-    <fragment
-        android:id="@+id/nav_edit_profile"
-        android:name="com.yutahnahsyah.upsmartcanteen.fragments.EditProfileFragment"
-        android:label="Edit Profile"
-        tools:layout="@layout/fragment_edit_profile" />
+  <fragment
+      android:id="@+id/nav_edit_profile"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.EditProfileFragment"
+      android:label="Edit Profile"
+      tools:layout="@layout/fragment_edit_profile" />
 
-    <fragment
-        android:id="@+id/nav_history"
-        android:name="com.yutahnahsyah.upsmartcanteen.fragments.HistoryFragment"
-        android:label="Order History"
-        tools:layout="@layout/fragment_history" />
+  <fragment
+      android:id="@+id/nav_history"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.HistoryFragment"
+      android:label="Order History"
+      tools:layout="@layout/fragment_history" />
 
-    <fragment
-        android:id="@+id/nav_notifications"
-        android:name="com.yutahnahsyah.upsmartcanteen.fragments.NotificationsFragment"
-        android:label="Notifications"
-        tools:layout="@layout/fragment_notifications" />
+  <fragment
+      android:id="@+id/nav_notifications"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.NotificationsFragment"
+      android:label="Notifications"
+      tools:layout="@layout/fragment_notifications" />
 
-    <fragment
-        android:id="@+id/nav_about"
-        android:name="com.yutahnahsyah.upsmartcanteen.fragments.AboutFragment"
-        android:label="About"
-        tools:layout="@layout/fragment_about">
-        <action
-            android:id="@+id/action_nav_about_to_nav_support"
-            app:destination="@id/nav_support" />
-    </fragment>
+  <fragment
+      android:id="@+id/nav_about"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.AboutFragment"
+      android:label="About"
+      tools:layout="@layout/fragment_about">
+    <action
+        android:id="@+id/action_nav_about_to_nav_support"
+        app:destination="@id/nav_support" />
+  </fragment>
 
-    <fragment
-        android:id="@+id/nav_support"
-        android:name="com.yutahnahsyah.upsmartcanteen.fragments.SupportFragment"
-        android:label="Support"
-        tools:layout="@layout/fragment_support" />
+  <fragment
+      android:id="@+id/nav_support"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.SupportFragment"
+      android:label="Support"
+      tools:layout="@layout/fragment_support" />
 
-    <fragment
-        android:id="@+id/nav_payment"
-        android:name="com.yutahnahsyah.upsmartcanteen.fragments.PaymentFragment"
-        android:label="Payment"
-        tools:layout="@layout/fragment_payment" />
+  <fragment
+      android:id="@+id/nav_payment"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.PaymentFragment"
+      android:label="Payment"
+      tools:layout="@layout/fragment_payment" />
 
-    <fragment
-        android:id="@+id/nav_terms"
-        android:name="com.yutahnahsyah.upsmartcanteen.fragments.TermsFragment"
-        android:label="Terms"
-        tools:layout="@layout/fragment_terms" />
+  <fragment
+      android:id="@+id/nav_terms"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.TermsFragment"
+      android:label="Terms"
+      tools:layout="@layout/fragment_terms" />
 
-    <fragment
-        android:id="@+id/nav_privacy"
-        android:name="com.yutahnahsyah.upsmartcanteen.fragments.PrivacyFragment"
-        android:label="Privacy"
-        tools:layout="@layout/fragment_privacy" />
+  <fragment
+      android:id="@+id/nav_privacy"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.PrivacyFragment"
+      android:label="Privacy"
+      tools:layout="@layout/fragment_privacy" />
+
 </navigation>

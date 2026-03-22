@@ -11,7 +11,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.messaging.FirebaseMessaging
 import com.yutahnahsyah.upsmartcanteen.BaseActivity
+import com.yutahnahsyah.upsmartcanteen.FcmTokenRequest
 import com.yutahnahsyah.upsmartcanteen.MainActivity
 import com.yutahnahsyah.upsmartcanteen.R
 import com.yutahnahsyah.upsmartcanteen.RetrofitClient
@@ -33,8 +35,7 @@ class Login : BaseActivity() {
     val registerBtn = findViewById<Button>(R.id.registerButton)
     val forgotPasswordBtn = findViewById<TextView>(R.id.forgotPassword)
     val togglePasswordBtn = findViewById<ImageButton>(R.id.togglePasswordVisibility)
-    val progressBar =
-      findViewById<ProgressBar>(R.id.progressBar)
+    val progressBar = findViewById<ProgressBar>(R.id.progressBar)
 
     togglePasswordBtn.setOnClickListener {
       isPasswordVisible = !isPasswordVisible
@@ -61,13 +62,11 @@ class Login : BaseActivity() {
     }
 
     registerBtn.setOnClickListener {
-      val intent = Intent(this@Login, CreateAccountActivity::class.java)
-      startActivity(intent)
+      startActivity(Intent(this@Login, CreateAccountActivity::class.java))
     }
 
     forgotPasswordBtn.setOnClickListener {
-      val intent = Intent(this@Login, ForgotPasswordActivity::class.java)
-      startActivity(intent)
+      startActivity(Intent(this@Login, ForgotPasswordActivity::class.java))
     }
   }
 
@@ -84,14 +83,17 @@ class Login : BaseActivity() {
           val token = response.body()?.token
 
           if (token != null) {
+            // Save auth token
             val sharedPref = getSharedPreferences("UserPrefs", android.content.Context.MODE_PRIVATE)
             with(sharedPref.edit()) {
               putString("auth_token", token)
               apply()
             }
 
-            val intent = Intent(this@Login, MainActivity::class.java)
-            startActivity(intent)
+            // Save FCM token to backend
+            saveFcmToken(token)
+
+            startActivity(Intent(this@Login, MainActivity::class.java))
             finish()
           }
         } else {
@@ -106,6 +108,21 @@ class Login : BaseActivity() {
       } catch (e: Exception) {
         loader.visibility = View.GONE
         Toast.makeText(this@Login, "Connection Failed: ${e.message}", Toast.LENGTH_SHORT).show()
+      }
+    }
+  }
+
+  private fun saveFcmToken(authToken: String) {
+    FirebaseMessaging.getInstance().token.addOnSuccessListener { fcmToken ->
+      lifecycleScope.launch {
+        try {
+          RetrofitClient.instance.saveFcmToken(
+            "Bearer $authToken",
+            FcmTokenRequest(fcmToken)
+          )
+        } catch (e: Exception) {
+          // Silently fail — login should not be blocked by FCM token saving
+        }
       }
     }
   }

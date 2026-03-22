@@ -171,7 +171,7 @@ class CartFragment : Fragment() {
                                 stallId = stallId,
                                 stallName = foodItems.firstOrNull()?.stall_name ?: "Unknown Stall",
                                 items = foodItems,
-                                subtotal = foodItems.sumOf { it.price }
+                              subtotal = foodItems.sumOf { it.price * it.quantity }  // ✅
                             )
                         }
                     adapter.updateData(groupedCarts)

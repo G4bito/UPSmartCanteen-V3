@@ -19,6 +19,8 @@ import com.yutahnahsyah.upsmartcanteen.R
 import com.yutahnahsyah.upsmartcanteen.RetrofitClient
 import com.yutahnahsyah.upsmartcanteen.adapter.StoreAdapter
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 
 class StallFragment : Fragment() {
 
@@ -41,14 +43,18 @@ class StallFragment : Fragment() {
     tvOpenCount = view.findViewById(R.id.tvOpenCount)
 
     adapter = StoreAdapter(emptyList()) { selectedStall ->
-      if (selectedStall.is_active) {
+      if (selectedStall.is_open) { // ← was is_active
         val bundle = Bundle().apply {
           putString("storeName", selectedStall.stall_name)
           putInt("stallId", selectedStall.stall_id)
         }
         findNavController().navigate(R.id.action_nav_stall_to_nav_store_food, bundle)
       } else {
-        Toast.makeText(requireContext(), "${selectedStall.stall_name} is currently closed", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+          requireContext(),
+          "${selectedStall.stall_name} is currently closed",
+          Toast.LENGTH_SHORT
+        ).show()
       }
     }
 
@@ -63,6 +69,7 @@ class StallFragment : Fragment() {
       override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         adapter.filter(s.toString())
       }
+
       override fun afterTextChanged(s: Editable?) {}
     })
   }
@@ -70,15 +77,14 @@ class StallFragment : Fragment() {
   private fun fetchStalls() {
     viewLifecycleOwner.lifecycleScope.launch {
       try {
-        val response = RetrofitClient.instance.getStalls()
+        val response = RetrofitClient.instance.getActiveStalls() // ← was getStalls()
         if (response.isSuccessful) {
           val allStalls = response.body() ?: emptyList()
-          
-          // Update the open count chip
-          val openCount = allStalls.count { it.is_active }
+
+          // Count open stalls for the chip
+          val openCount = allStalls.count { it.is_open } // ← was is_active
           tvOpenCount?.text = "$openCount open"
-          
-          // Show all stalls, not just active ones
+
           adapter.updateData(allStalls)
         } else {
           Log.e("STALL_FETCH", "Error: ${response.code()}")
@@ -87,6 +93,28 @@ class StallFragment : Fragment() {
       } catch (e: Exception) {
         Log.e("STALL_FETCH", "Exception", e)
         Toast.makeText(requireContext(), "Network error", Toast.LENGTH_SHORT).show()
+      }
+    }
+  }
+
+  private var pollingJob: Job? = null
+
+  override fun onResume() {
+    super.onResume()
+    startPolling()
+  }
+
+  override fun onPause() {
+    super.onPause()
+    pollingJob?.cancel()
+  }
+
+  private fun startPolling() {
+    pollingJob?.cancel()
+    pollingJob = viewLifecycleOwner.lifecycleScope.launch {
+      while (true) {
+        fetchStalls()
+        delay(3_000)
       }
     }
   }

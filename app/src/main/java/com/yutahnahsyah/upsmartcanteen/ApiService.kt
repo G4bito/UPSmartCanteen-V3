@@ -6,27 +6,44 @@ import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
+data class ForgotPasswordRequest(val email: String)
+data class VerifyOtpRequest(val email: String, val otp: String)
+data class ResetPasswordRequest(val resetToken: String, val newPassword: String)
+data class MessageResponse(val message: String)
+data class ResetTokenResponse(val resetToken: String)
+
+data class FcmTokenRequest(val fcm_token: String)
+
 data class PlaceOrderRequest(
-    val stall_id: Int,
-    val payment_type: String,
-    val order_remarks: String? = ""
+  val stall_id: Int,
+  val payment_type: String,
+  val order_remarks: String? = ""
 )
 
 data class AddToCartRequest(
-    val item_id: Int,
-    val quantity: Int
+  val item_id: Int,
+  val quantity: Int
 )
 
 data class CartResponse(
-    val message: String
+  val message: String
 )
 
 data class OrderResponse(
-    val order_id: Int,
-    val status: String,
-    val total_price: Double,
-    val order_date: String,
-    val stall_name_snapshot: String? = null
+  val order_id: Int,
+  val status: String,
+  val total_price: Double,
+  val order_date: String,
+  val stall_name_snapshot: String? = null
+)
+
+data class UpdateCartItemRequest(val quantity: Int)
+
+data class CartValidationResponse(
+  val valid: Boolean,
+  val unavailableItems: List<Int>,
+  val stallClosed: Boolean,
+  val stallInactive: Boolean
 )
 
 interface ApiService {
@@ -96,4 +113,37 @@ interface ApiService {
   suspend fun getMyOrders(
     @Header("Authorization") token: String
   ): Response<List<OrderResponse>>
+
+  @POST("api/forgotPassword")
+  suspend fun forgotPassword(@Body body: ForgotPasswordRequest): Response<MessageResponse>
+
+  @POST("api/verifyOtp")
+  suspend fun verifyOtp(@Body body: VerifyOtpRequest): Response<ResetTokenResponse>
+
+  @POST("api/resetPassword")
+  suspend fun resetPassword(@Body body: ResetPasswordRequest): Response<MessageResponse>
+
+  @POST("api/saveFcmToken")
+  suspend fun saveFcmToken(
+    @Header("Authorization") token: String,
+    @Body body: FcmTokenRequest
+  ): Response<MessageResponse>
+
+  @DELETE("api/removeFromCart/{cartItemId}")
+  suspend fun removeCartItem(
+    @Header("Authorization") token: String,
+    @Path("cartItemId") cartItemId: Int
+  ): Response<CartResponse>
+
+  @PUT("api/updateCartItem/{cartItemId}")
+  suspend fun updateCartItem(
+    @Header("Authorization") token: String,
+    @Path("cartItemId") cartItemId: Int,
+    @Body request: UpdateCartItemRequest
+  ): Response<CartResponse>
+
+  @GET("api/validateCart")
+  suspend fun validateCart(
+    @Header("Authorization") token: String
+  ): Response<CartValidationResponse>
 }

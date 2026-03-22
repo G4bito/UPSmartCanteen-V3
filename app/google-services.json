@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "857458350808",
+    "project_id": "upsmart-canteen-e665a",
+    "storage_bucket": "upsmart-canteen-e665a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:857458350808:android:41c48f26b22ba261c915ad",
+        "android_client_info": {
+          "package_name": "com.yutahnahsyah.upsmartcanteen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGmqkJdfqZC-SmIhLxafz6SAJWZtEp-WU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

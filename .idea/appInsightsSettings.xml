@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.yutahnahsyah.upsmartcanteen" />
+                  <option name="mobileSdkAppId" value="1:857458350808:android:41c48f26b22ba261c915ad" />
+                  <option name="projectId" value="upsmart-canteen-e665a" />
+                  <option name="projectNumber" value="857458350808" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
