@@ -1,5 +1,6 @@
 package com.yutahnahsyah.upsmartcanteen
 
+import com.yutahnahsyah.upsmartcanteen.data.model.Notification
 import com.yutahnahsyah.upsmartcanteen.data.model.Stall
 import com.yutahnahsyah.upsmartcanteen.data.model.FoodItem
 import okhttp3.MultipartBody
@@ -151,4 +152,10 @@ interface ApiService {
   suspend fun validateCart(
     @Header("Authorization") token: String
   ): Response<CartValidationResponse>
+
+  // ✅ NEW — fetch notifications from DB
+  @GET("api/notifications")
+  suspend fun getNotifications(
+    @Header("Authorization") token: String
+  ): Response<List<Notification>>
 }

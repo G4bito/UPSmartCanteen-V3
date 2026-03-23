@@ -51,7 +51,6 @@ class ProfileFragment : Fragment() {
         loadUserProfile()
         loadOrderStats()
 
-        // FIXED: Found as View instead of ImageView to avoid ClassCastException
         view.findViewById<View>(R.id.onboardingInfoIcon)?.setOnClickListener {
             val intent = Intent(requireContext(), OnboardingActivity::class.java)
             intent.putExtra("forceShow", true)
@@ -83,15 +82,8 @@ class ProfileFragment : Fragment() {
         }
 
         view.findViewById<MaterialButton>(R.id.logoutButton)?.setOnClickListener {
-            // Clear notifications for this user
+            // ✅ Just clear the session — notifications stay safe in the DB
             val sharedPref = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-            val employeeId = sharedPref.getString("employee_id", null)
-            if (employeeId != null) {
-                requireContext().getSharedPreferences("notifications_$employeeId", Context.MODE_PRIVATE)
-                    .edit().clear().apply()
-            }
-
-            // Clear user session
             sharedPref.edit().clear().apply()
 
             val intent = Intent(requireActivity(), Login::class.java)
@@ -129,7 +121,6 @@ class ProfileFragment : Fragment() {
 
                         if (!user.profile_picture_url.isNullOrEmpty()) {
                             val fullImageUrl = Constants.getFullImageUrl(user.profile_picture_url)
-
                             profileIv?.let {
                                 Glide.with(this@ProfileFragment)
                                     .load(fullImageUrl)
@@ -161,17 +152,17 @@ class ProfileFragment : Fragment() {
                 if (response.isSuccessful) {
                     val orders = response.body() ?: emptyList()
 
-                    val successfulOrders = orders.filter { 
-                        it.status.equals("completed", ignoreCase = true) || 
-                        it.status.equals("picked_up", ignoreCase = true)
+                    val successfulOrders = orders.filter {
+                        it.status.equals("completed", ignoreCase = true) ||
+                                it.status.equals("picked_up", ignoreCase = true)
                     }
-                    
+
                     val totalOrders = successfulOrders.size
                     val totalSpent = successfulOrders.sumOf { it.total_price }
 
                     statOrdersTv?.text = totalOrders.toString()
                     statSpentTv?.text = String.format(Locale.getDefault(), "₱%.2f", totalSpent)
-                    
+
                     Log.d("PROFILE_STATS", "Loaded stats: $totalOrders successful orders, $totalSpent spent")
                 } else {
                     Log.e("PROFILE_STATS", "Failed to load orders: ${response.code()}")
