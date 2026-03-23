@@ -11,7 +11,6 @@ data class VerifyOtpRequest(val email: String, val otp: String)
 data class ResetPasswordRequest(val resetToken: String, val newPassword: String)
 data class MessageResponse(val message: String)
 data class ResetTokenResponse(val resetToken: String)
-
 data class FcmTokenRequest(val fcm_token: String)
 
 data class PlaceOrderRequest(
@@ -29,12 +28,19 @@ data class CartResponse(
   val message: String
 )
 
+data class PlaceOrderResponse(
+  val message: String,
+  val order: OrderResponse? = null
+)
+
 data class OrderResponse(
   val order_id: Int,
   val status: String,
   val total_price: Double,
-  val order_date: String,
-  val stall_name_snapshot: String? = null
+  val order_time: String? = null,
+  val stall_name_snapshot: String? = null,
+  val completed_at: String? = null,
+  val cancelled_at: String? = null
 )
 
 data class UpdateCartItemRequest(val quantity: Int)
@@ -58,7 +64,6 @@ interface ApiService {
     @Header("Authorization") token: String
   ): Response<UserData>
 
-  // FIXED: Added missing editUserProfile method
   @PUT("api/editUser")
   suspend fun editUserProfile(
     @Header("Authorization") token: String,
@@ -107,7 +112,7 @@ interface ApiService {
   suspend fun placeOrder(
     @Header("Authorization") token: String,
     @Body request: PlaceOrderRequest
-  ): Response<CartResponse>
+  ): Response<PlaceOrderResponse>
 
   @GET("api/myOrders")
   suspend fun getMyOrders(

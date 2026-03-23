@@ -42,7 +42,48 @@ class CreateAccountActivity : BaseActivity() {
     val tvTermsAndPrivacy = findViewById<TextView>(R.id.tvTermsAndPrivacy)
     val tvLogin = findViewById<TextView>(R.id.tvLogin)
 
+    // ✅ Disable button on start
+    btnRegister.isEnabled = false
+    btnRegister.alpha = 0.5f
+
     setupDepartmentSpinner()
+
+    // Employee ID formatter
+    etEmployeeId.setText("EMD-")
+    etEmployeeId.setSelection(etEmployeeId.text.length)
+    etEmployeeId.filters = arrayOf(InputFilter.LengthFilter(7))
+
+    etEmployeeId.addTextChangedListener(object : TextWatcher {
+      private var isFormatting = false
+
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+      override fun afterTextChanged(s: Editable?) {
+        if (isFormatting) return
+        isFormatting = true
+
+        val input = s.toString()
+
+        if (!input.startsWith("EMD-")) {
+          etEmployeeId.setText("EMD-")
+          etEmployeeId.setSelection(4)
+          isFormatting = false
+          return
+        }
+
+        val digits = input.removePrefix("EMD-").filter { it.isDigit() }.take(3)
+        val formatted = "EMD-$digits"
+
+        if (input != formatted) {
+          etEmployeeId.setText(formatted)
+          etEmployeeId.setSelection(formatted.length)
+        }
+
+        isFormatting = false
+        checkFields()
+      }
+    })
 
     val noSpaceFilter = InputFilter { source, start, end, _, _, _ ->
       for (i in start until end) {
@@ -58,10 +99,8 @@ class CreateAccountActivity : BaseActivity() {
       override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         checkFields()
       }
-
       override fun afterTextChanged(s: Editable?) {}
     }
-    etEmployeeId.addTextChangedListener(watcher)
     etFullName.addTextChangedListener(watcher)
     etEmail.addTextChangedListener(watcher)
     etPassword.addTextChangedListener(watcher)
@@ -100,18 +139,16 @@ class CreateAccountActivity : BaseActivity() {
     val confirm = etConfirmPassword.text.toString()
     val isChecked = cbTerms.isChecked
 
-    if (btnRegister.isEnabled) {
-      btnRegister.alpha = 1.0f
-    } else {
-      btnRegister.alpha = 0.5f
-    }
-
-    btnRegister.isEnabled = id.isNotEmpty() &&
+    val isValid = id.length == 7 &&
+            id.matches(Regex("EMD-\\d{3}")) &&
             name.isNotEmpty() &&
             email.isNotEmpty() &&
             pass.length >= 8 &&
             confirm.isNotEmpty() &&
             isChecked
+
+    btnRegister.isEnabled = isValid
+    btnRegister.alpha = if (isValid) 1.0f else 0.5f
   }
 
   private fun performRegistration(
@@ -132,8 +169,11 @@ class CreateAccountActivity : BaseActivity() {
         progressBar.visibility = View.GONE
 
         if (response.isSuccessful) {
-          Toast.makeText(this@CreateAccountActivity, "Registration Successful!", Toast.LENGTH_SHORT)
-            .show()
+          Toast.makeText(
+            this@CreateAccountActivity,
+            "Registration Successful!",
+            Toast.LENGTH_SHORT
+          ).show()
           startActivity(Intent(this@CreateAccountActivity, Login::class.java))
           finish()
         } else {
@@ -144,14 +184,19 @@ class CreateAccountActivity : BaseActivity() {
       } catch (e: Exception) {
         progressBar.visibility = View.GONE
         btnRegister.isEnabled = true
-        Toast.makeText(this@CreateAccountActivity, "Server Error: ${e.message}", Toast.LENGTH_SHORT)
-          .show()
+        Toast.makeText(
+          this@CreateAccountActivity,
+          "Server Error: ${e.message}",
+          Toast.LENGTH_SHORT
+        ).show()
       }
     }
   }
 
   private fun validateInput(name: String, email: String, pass: String, confirm: String): Boolean {
-    if (!email.lowercase().endsWith("@phinmaed.com") && !email.lowercase().endsWith("@gmail.com")) {
+    if (!email.lowercase().endsWith("@phinmaed.com") && !email.lowercase()
+        .endsWith("@gmail.com")
+    ) {
       Toast.makeText(this, "Use PhinmaEd or Gmail account", Toast.LENGTH_SHORT).show()
       return false
     }

@@ -83,6 +83,17 @@ class ProfileFragment : Fragment() {
         }
 
         view.findViewById<MaterialButton>(R.id.logoutButton)?.setOnClickListener {
+            // Clear notifications for this user
+            val sharedPref = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+            val employeeId = sharedPref.getString("employee_id", null)
+            if (employeeId != null) {
+                requireContext().getSharedPreferences("notifications_$employeeId", Context.MODE_PRIVATE)
+                    .edit().clear().apply()
+            }
+
+            // Clear user session
+            sharedPref.edit().clear().apply()
+
             val intent = Intent(requireActivity(), Login::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

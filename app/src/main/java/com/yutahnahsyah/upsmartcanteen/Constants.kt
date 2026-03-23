@@ -1,7 +1,7 @@
 package com.yutahnahsyah.upsmartcanteen
 
 object Constants {
-  private const val IP_ADDRESS = "192.168.68.111"
+  private const val IP_ADDRESS = "192.168.18.41"
   private const val PORT = "3000"
 
   const val BASE_URL = "http://$IP_ADDRESS:$PORT/"

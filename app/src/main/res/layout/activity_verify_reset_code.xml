@@ -214,7 +214,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Check your email inbox and enter the 6-digit reset code below. It expires in 10 minutes."
+                        android:text="Check your email inbox and enter the 6-digit reset code below. It expires in 5 minutes."
                         android:textColor="#546E7A"
                         android:textSize="12sp"
                         android:lineSpacingMultiplier="1.4" />

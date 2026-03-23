@@ -35,6 +35,32 @@
   </fragment>
 
   <fragment
+      android:id="@+id/nav_cart_details"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.CartDetailsFragment"
+      android:label="Cart Details"
+      tools:layout="@layout/fragment_cart_details">
+    <argument
+        android:name="storeName"
+        app:argType="string" />
+    <action
+        android:id="@+id/action_nav_cart_details_to_nav_store_food"
+        app:destination="@id/nav_store_food" />
+    <action
+        android:id="@+id/action_nav_cart_details_to_nav_payment"
+        app:destination="@id/nav_payment" />
+    <action
+        android:id="@+id/action_nav_cart_details_to_nav_history"
+        app:destination="@id/nav_history"
+        app:popUpTo="@id/nav_cart"
+        app:popUpToInclusive="true" />
+    <action
+        android:id="@+id/action_nav_cart_details_to_nav_stall"
+        app:destination="@id/nav_stall"
+        app:popUpTo="@id/nav_stall"
+        app:popUpToInclusive="false" />
+  </fragment>
+
+  <fragment
       android:id="@+id/nav_profile"
       android:name="com.yutahnahsyah.upsmartcanteen.fragments.ProfileFragment"
       android:label="Profile"
@@ -76,27 +102,6 @@
     <argument
         android:name="stallId"
         app:argType="integer" />
-  </fragment>
-
-  <fragment
-      android:id="@+id/nav_cart_details"
-      android:name="com.yutahnahsyah.upsmartcanteen.fragments.CartDetailsFragment"
-      android:label="Cart Details"
-      tools:layout="@layout/fragment_cart_details">
-    <argument
-        android:name="storeName"
-        app:argType="string" />
-    <action
-        android:id="@+id/action_nav_cart_details_to_nav_store_food"
-        app:destination="@id/nav_store_food" />
-    <action
-        android:id="@+id/action_nav_cart_details_to_nav_payment"
-        app:destination="@id/nav_payment" />
-    <action
-        android:id="@+id/action_nav_cart_details_to_nav_history"
-        app:destination="@id/nav_history"
-        app:popUpTo="@id/nav_cart"
-        app:popUpToInclusive="true" />
   </fragment>
 
   <fragment

@@ -3,6 +3,7 @@ package com.yutahnahsyah.upsmartcanteen.auth
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -81,18 +82,30 @@ class Login : BaseActivity() {
 
         if (response.isSuccessful) {
           val token = response.body()?.token
+          val user = response.body()?.user
+
+          Log.d("LOGIN_DEBUG", "token=$token, employee_id=${user?.employee_id}, full_name=${user?.full_name}")
 
           if (token != null) {
-            // Save auth token
             val sharedPref = getSharedPreferences("UserPrefs", android.content.Context.MODE_PRIVATE)
+
             with(sharedPref.edit()) {
               putString("auth_token", token)
+              putString("employee_id", user?.employee_id)
+              putString("user_full_name", user?.full_name)
+              putString("user_department", user?.department)
               apply()
             }
 
-            // Save FCM token to backend
-            saveFcmToken(token)
+            Log.d("LOGIN_DEBUG", "Saved employee_id: ${sharedPref.getString("employee_id", null)}")
 
+            // Clear old shared notification keys from before the fix
+            getSharedPreferences("notifications_null", android.content.Context.MODE_PRIVATE)
+              .edit().clear().apply()
+            getSharedPreferences("notifications", android.content.Context.MODE_PRIVATE)
+              .edit().clear().apply()
+
+            saveFcmToken(token)
             startActivity(Intent(this@Login, MainActivity::class.java))
             finish()
           }
@@ -121,7 +134,7 @@ class Login : BaseActivity() {
             FcmTokenRequest(fcmToken)
           )
         } catch (e: Exception) {
-          // Silently fail — login should not be blocked by FCM token saving
+          // Silently fail
         }
       }
     }

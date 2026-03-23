@@ -191,7 +191,7 @@
               android:layout_marginStart="10dp"
               android:layout_weight="1"
               android:background="@android:color/transparent"
-              android:hint="Employee ID"
+              android:hint="EMD-###"
               android:inputType="text"
               android:textColor="#1A2E1A"
               android:textColorHint="#C0C8C0"

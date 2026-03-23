@@ -68,6 +68,15 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+        <!-- Order Placed Time -->
+        <TextView
+            android:id="@+id/tvOrderPlacedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="#9E9E9E"
+            android:textSize="12sp" />
+
         <!-- Receipt Box -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,7 +86,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Items List (This would be a RecyclerView or dynamic) -->
             <TextView
                 android:id="@+id/tvOrderItems"
                 android:layout_width="match_parent"
@@ -87,9 +95,6 @@
                 android:textColor="#424242"
                 android:textSize="15sp"
                 android:textStyle="bold" />
-
-            <!-- Price for the item above (aligned right in mock, but layout usually handles differently) -->
-            <!-- In a real implementation, you'd use a row layout for each item -->
 
             <View
                 android:layout_width="match_parent"
@@ -142,17 +147,9 @@
             android:layout_marginTop="20dp"
             android:background="#F5F5F5" />
 
-        <!-- Time Info -->
-        <TextView
-            android:id="@+id/tvOrderPlacedTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Order Placed: 3/21/2026, 8:50:36 AM"
-            android:textColor="#9E9E9E"
-            android:textSize="12sp" />
-
+        <!-- Status Time Container -->
         <LinearLayout
+            android:id="@+id/llStatusTimeContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"

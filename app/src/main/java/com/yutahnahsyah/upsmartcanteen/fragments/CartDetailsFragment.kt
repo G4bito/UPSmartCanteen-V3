@@ -232,8 +232,19 @@ class CartDetailsFragment : Fragment() {
       return
     }
 
-    // ✅ Re-validate stall before placing
+    androidx.appcompat.app.AlertDialog.Builder(requireContext())
+      .setTitle("Confirm Order")
+      .setMessage("Are you sure you want to place this order?")
+      .setPositiveButton("Yes, Place Order") { _, _ ->
+        submitOrder(token)
+      }
+      .setNegativeButton("Cancel", null)
+      .show()
+  }
+
+  private fun submitOrder(token: String) {
     viewLifecycleOwner.lifecycleScope.launch {
+      // Re-validate stall before placing
       try {
         val validationResponse = RetrofitClient.instance.validateCart("Bearer $token")
         if (validationResponse.isSuccessful) {
@@ -266,8 +277,23 @@ class CartDetailsFragment : Fragment() {
       try {
         val response = RetrofitClient.instance.placeOrder("Bearer $token", request)
         if (response.isSuccessful) {
-          Toast.makeText(requireContext(), "Order placed successfully!", Toast.LENGTH_LONG).show()
-          findNavController().navigate(R.id.action_nav_cart_details_to_nav_history)
+          val order = response.body()?.order
+
+          val itemsSummary = itemsToOrder.joinToString("\n") {
+            "${it.quantity}x ${it.name}  ₱${String.format(Locale.getDefault(), "%.2f", it.price * it.quantity)}"
+          }
+          val total = itemsToOrder.sumOf { it.price * it.quantity }
+
+          val receipt = ReceiptBottomSheetFragment.newInstance(
+            orderId = order?.order_id ?: 0,
+            stallName = args.storeName,
+            items = itemsSummary,
+            total = total,
+            payment = "Cash",
+            remarks = remarks
+          )
+          receipt.show(parentFragmentManager, "ReceiptBottomSheet")
+
         } else {
           val errorMsg = response.errorBody()?.string() ?: ""
           Log.e("PLACE_ORDER", "Error: $errorMsg")

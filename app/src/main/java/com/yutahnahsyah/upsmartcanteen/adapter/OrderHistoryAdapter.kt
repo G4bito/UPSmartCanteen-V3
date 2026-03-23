@@ -7,11 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.yutahnahsyah.upsmartcanteen.OrderResponse
 import com.yutahnahsyah.upsmartcanteen.R
+import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.TimeZone
 
 class OrderHistoryAdapter(private var orders: List<OrderResponse>) :
     RecyclerView.Adapter<OrderHistoryAdapter.OrderViewHolder>() {
@@ -26,6 +29,7 @@ class OrderHistoryAdapter(private var orders: List<OrderResponse>) :
         val tvOrderPlacedTime: TextView = view.findViewById(R.id.tvOrderPlacedTime)
         val tvOrderTimeStatus: TextView = view.findViewById(R.id.tvOrderTimeStatus)
         val ivStatusIcon: ImageView = view.findViewById(R.id.ivStatusIcon)
+        val llStatusTimeContainer: LinearLayout = view.findViewById(R.id.llStatusTimeContainer)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
@@ -37,37 +41,47 @@ class OrderHistoryAdapter(private var orders: List<OrderResponse>) :
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
         val order = orders[position]
         val context = holder.itemView.context
-        
+
         holder.tvOrderId.text = "# ${order.order_id}"
-        holder.tvOrderStatus.text = order.status.uppercase()
-        
-        // Since the backend might not return these yet, we use placeholders or user info
+        holder.tvOrderStatus.text = order.status.uppercase(Locale.ROOT)
+
         val sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
         holder.tvCustomerName.text = sharedPref.getString("user_full_name", "Customer")
         holder.tvDepartment.text = sharedPref.getString("user_department", "Canteen")
-        
-        // Assuming order_date is the placed time
-        holder.tvOrderPlacedTime.text = "Order Placed: ${order.order_date}"
-        
-        // Logic for Status Colors and Icons
+
+        holder.tvOrderPlacedTime.text = "Order Placed: ${formatDateTime(order.order_time)}"
+
         when (order.status.lowercase()) {
             "completed", "picked_up" -> {
                 setStatusStyle(holder, context, "#2E7D32", "#E8F5E9", R.drawable.ic_check_circle)
-                holder.tvOrderTimeStatus.text = "Completed: ${order.order_date}"
+                holder.tvOrderTimeStatus.text = "Completed: ${formatDateTime(order.completed_at)}"
             }
             "cancelled" -> {
                 setStatusStyle(holder, context, "#D32F2F", "#FFEBEE", R.drawable.ic_cancel_circle)
-                holder.tvOrderTimeStatus.text = "Cancelled: ${order.order_date}"
+                holder.tvOrderTimeStatus.text = "Cancelled: ${formatDateTime(order.cancelled_at)}"
             }
-            else -> { // Pending or Processing
+            else -> {
                 setStatusStyle(holder, context, "#F57C00", "#FFF3E0", R.drawable.ic_history)
-                holder.tvOrderTimeStatus.text = "Status: ${order.status}"
+                holder.tvOrderTimeStatus.text = "Placed: ${formatDateTime(order.order_time)}"
             }
         }
 
-        // Display items (assuming we format them as a string for now)
-        holder.tvOrderItems.text = "Order Summary" 
+        holder.tvOrderItems.text = "Order Summary"
         holder.tvOrderTotal.text = String.format(Locale.getDefault(), "₱%.2f", order.total_price)
+    }
+
+    private fun formatDateTime(raw: String?): String {
+        if (raw == null) return "—"
+        return try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+            val outputFormat = SimpleDateFormat("M/d/yyyy, h:mm:ss a", Locale.getDefault())
+            outputFormat.timeZone = TimeZone.getTimeZone("Asia/Manila")
+            val date = inputFormat.parse(raw)
+            outputFormat.format(date!!)
+        } catch (e: Exception) {
+            raw
+        }
     }
 
     private fun setStatusStyle(holder: OrderViewHolder, context: Context, textColor: String, bgColor: String, iconRes: Int) {
