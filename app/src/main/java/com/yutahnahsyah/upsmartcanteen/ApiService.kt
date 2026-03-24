@@ -34,6 +34,12 @@ data class PlaceOrderResponse(
   val order: OrderResponse? = null
 )
 
+data class OrderItemResponse(
+  val item_name: String,
+  val quantity: Int,
+  val price: Double
+)
+
 data class OrderResponse(
   val order_id: Int,
   val status: String,
@@ -41,7 +47,10 @@ data class OrderResponse(
   val order_time: String? = null,
   val stall_name_snapshot: String? = null,
   val completed_at: String? = null,
-  val cancelled_at: String? = null
+  val cancelled_at: String? = null,
+  val customer_name: String? = null,
+  val department: String? = null,
+  val items: List<OrderItemResponse>? = null
 )
 
 data class UpdateCartItemRequest(val quantity: Int)

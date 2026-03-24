@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class FoodItem(
   @SerializedName("cart_item_id")
-  val cart_item_id: Int = 0,  // ← add this
+  val cart_item_id: Int = 0,
 
   @SerializedName("item_id")
   val item_id: Int,
@@ -35,6 +35,9 @@ data class FoodItem(
 
   @SerializedName("is_available")
   val is_available: Boolean,
+
+  @SerializedName("is_open")
+  val is_open: Boolean = true,
 
   @SerializedName("quantity")
   var quantity: Int = 1

@@ -84,19 +84,25 @@ class EditProfileFragment : Fragment() {
             etPassword?.let { it.setSelection(it.text.length) }
         }
 
-        btnSave?.setOnClickListener {
-            val name = etFullName?.text?.toString()?.trim() ?: ""
-            val email = etEmail?.text?.toString()?.trim() ?: ""
-            val selectedDept = spinnerDept?.selectedItem?.toString() ?: ""
-            val password = etPassword?.text?.toString()?.trim() ?: ""
+      btnSave?.setOnClickListener {
+        val name = etFullName?.text?.toString()?.trim() ?: ""
+        val email = etEmail?.text?.toString()?.trim() ?: ""
+        val selectedDept = spinnerDept?.selectedItem?.toString() ?: ""
+        val password = etPassword?.text?.toString()?.trim() ?: ""
 
-            if (token != null && name.isNotEmpty() && email.isNotEmpty()) {
-                updateProfile(token, name, email, selectedDept, password)
-            } else {
-                Toast.makeText(requireContext(), "Name and Email are required", Toast.LENGTH_SHORT).show()
-            }
+        val validEmailRegex = Regex("^[^@]+@(phinmaed\\.com|gmail\\.com)$")
+
+        if (token != null && name.isNotEmpty() && email.isNotEmpty()) {
+          if (!validEmailRegex.matches(email)) {
+            etEmail?.error = "Email must end with @phinmaed.com or @gmail.com"
+            etEmail?.requestFocus()
+          } else {
+            updateProfile(token, name, email, selectedDept, password)
+          }
+        } else {
+          Toast.makeText(requireContext(), "Name and Email are required", Toast.LENGTH_SHORT).show()
         }
-    }
+      }    }
 
     private fun loadCurrentProfile(token: String, nameEt: EditText?, emailEt: EditText?, deptSpinner: Spinner?) {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -126,23 +132,30 @@ class EditProfileFragment : Fragment() {
         }
     }
 
-    private fun updateProfile(token: String, name: String, email: String, dept: String, pass: String) {
-        // Use currentEmployeeId to ensure the backend knows which user to update
-        val updateRequest = RegisterRequest(currentEmployeeId, name, email, pass, dept)
-        viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                val response = RetrofitClient.instance.editUserProfile("Bearer $token", updateRequest)
-                if (response.isSuccessful) {
-                    Toast.makeText(requireContext(), "Profile updated!", Toast.LENGTH_SHORT).show()
-                    findNavController().navigateUp()
-                } else {
-                    Toast.makeText(requireContext(), "Update failed: ${response.code()}", Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Network error", Toast.LENGTH_SHORT).show()
-            }
+  private fun updateProfile(token: String, name: String, email: String, dept: String, pass: String) {
+    val updateRequest = RegisterRequest(currentEmployeeId, name, email, pass, dept)
+    viewLifecycleOwner.lifecycleScope.launch {
+      try {
+        val response = RetrofitClient.instance.editUserProfile("Bearer $token", updateRequest)
+        if (response.isSuccessful) {
+          // ✅ Sync updated values back to SharedPreferences
+          val sharedPref = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+          sharedPref.edit().apply {
+            putString("user_full_name", name)
+            putString("user_department", dept)
+            apply()
+          }
+
+          Toast.makeText(requireContext(), "Profile updated!", Toast.LENGTH_SHORT).show()
+          findNavController().navigateUp()
+        } else {
+          Toast.makeText(requireContext(), "Update failed: ${response.code()}", Toast.LENGTH_SHORT).show()
         }
+      } catch (e: Exception) {
+        Toast.makeText(requireContext(), "Network error", Toast.LENGTH_SHORT).show()
+      }
     }
+  }
 
     private fun uploadImageToServer(uri: Uri) {
         val sharedPref = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)

@@ -49,7 +49,7 @@ class CreateAccountActivity : BaseActivity() {
     setupDepartmentSpinner()
 
     // Employee ID formatter
-    etEmployeeId.setText("EMD-")
+    etEmployeeId.setText("EMP-")
     etEmployeeId.setSelection(etEmployeeId.text.length)
     etEmployeeId.filters = arrayOf(InputFilter.LengthFilter(7))
 
@@ -65,15 +65,15 @@ class CreateAccountActivity : BaseActivity() {
 
         val input = s.toString()
 
-        if (!input.startsWith("EMD-")) {
-          etEmployeeId.setText("EMD-")
+        if (!input.startsWith("EMP-")) {
+          etEmployeeId.setText("EMP-")
           etEmployeeId.setSelection(4)
           isFormatting = false
           return
         }
 
-        val digits = input.removePrefix("EMD-").filter { it.isDigit() }.take(3)
-        val formatted = "EMD-$digits"
+        val digits = input.removePrefix("EMP-").filter { it.isDigit() }.take(3)
+        val formatted = "EMP-$digits"
 
         if (input != formatted) {
           etEmployeeId.setText(formatted)
@@ -140,7 +140,7 @@ class CreateAccountActivity : BaseActivity() {
     val isChecked = cbTerms.isChecked
 
     val isValid = id.length == 7 &&
-            id.matches(Regex("EMD-\\d{3}")) &&
+            id.matches(Regex("EMP-\\d{3}")) &&
             name.isNotEmpty() &&
             email.isNotEmpty() &&
             pass.length >= 8 &&

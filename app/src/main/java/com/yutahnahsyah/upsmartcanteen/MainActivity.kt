@@ -10,6 +10,8 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -21,14 +23,18 @@ import kotlinx.coroutines.launch
 class MainActivity : BaseActivity() {
 
   private var sessionCheckJob: Job? = null
+  private lateinit var navController: NavController
+  private var pendingNavigateTo: String? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
+    pendingNavigateTo = intent?.getStringExtra("navigate_to")
+
     val navHostFragment = supportFragmentManager
       .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-    val navController = navHostFragment.navController
+    navController = navHostFragment.navController
 
     val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
     bottomNav.setupWithNavController(navController)
@@ -39,7 +45,6 @@ class MainActivity : BaseActivity() {
         else -> bottomNav.visibility = View.VISIBLE
       }
 
-      // Sync bottom nav highlight with current destination
       when (destination.id) {
         R.id.nav_stall,
         R.id.nav_store_food ->
@@ -66,6 +71,36 @@ class MainActivity : BaseActivity() {
     }
 
     requestNotificationPermission()
+
+    if (savedInstanceState == null && intent?.getStringExtra("navigate_to") == "history") {
+      navController.addOnDestinationChangedListener(
+        object : NavController.OnDestinationChangedListener {
+          override fun onDestinationChanged(
+            controller: NavController,
+            destination: NavDestination,
+            arguments: Bundle?
+          ) {
+            navController.removeOnDestinationChangedListener(this)
+            window.decorView.post {
+              navController.navigate(R.id.nav_history)
+            }
+          }
+        }
+      )
+    }
+  }
+
+  override fun onNewIntent(intent: Intent) {
+    super.onNewIntent(intent)
+    setIntent(intent)
+    if (intent.getStringExtra("navigate_to") == "history") {
+      intent.removeExtra("navigate_to")
+      window.decorView.postDelayed({
+        if (!isFinishing && !isDestroyed) {
+          navController.navigate(R.id.action_global_to_nav_history)
+        }
+      }, 200)
+    }
   }
 
   private fun requestNotificationPermission() {

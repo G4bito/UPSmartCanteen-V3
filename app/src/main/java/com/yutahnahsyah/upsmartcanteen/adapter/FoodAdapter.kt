@@ -40,53 +40,78 @@ class FoodAdapter(
         return FoodViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: FoodViewHolder, position: Int) {
-        val food = displayedList[position]
-        val ctx = holder.itemView.context
+  override fun onBindViewHolder(holder: FoodViewHolder, position: Int) {
+    val food = displayedList[position]
+    val ctx = holder.itemView.context
 
-        // Basic fields
-        holder.name.text = food.name
-        holder.price.text = String.format(Locale.getDefault(), "₱%.2f", food.price)
-        holder.store.text = food.stall_name ?: "Unknown Stall"
-        holder.category.text = food.category.uppercase()
-        holder.description.text = food.description ?: "No description provided."
-        holder.stock.text = "Stocks: ${food.stock_qty}"
+    // 1. Basic fields setup
+    holder.name.text = food.name
+    holder.price.text = String.format(Locale.getDefault(), "₱%.2f", food.price)
+    holder.store.text = food.stall_name ?: "Unknown Stall"
+    holder.category.text = food.category.uppercase()
+    holder.description.text = food.description ?: "No description provided."
+    holder.stock.text = "Stocks: ${food.stock_qty}"
 
-        // Status — dot color + label + add button state
-        val isAvailable = food.is_available && food.stock_qty > 0
-        if (isAvailable) {
-            holder.statusDot.background =
-                ContextCompat.getDrawable(ctx, R.drawable.bg_status_dot_open)
-            holder.status.text = "Available"
-            holder.status.setTextColor(Color.parseColor("#43A047"))
-            holder.btnAddToCart.setCardBackgroundColor(Color.parseColor("#1B5E20"))
-            holder.btnAddToCart.isClickable = true
-            holder.btnAddToCart.alpha = 1f
-        } else {
-            holder.statusDot.background =
-                ContextCompat.getDrawable(ctx, R.drawable.bg_status_dot_closed)
-            holder.status.text = if (food.stock_qty <= 0) "Out of Stock" else "Unavailable"
-            holder.status.setTextColor(Color.parseColor("#E53935"))
-            holder.btnAddToCart.setCardBackgroundColor(Color.parseColor("#E0E0E0"))
-            holder.btnAddToCart.isClickable = false
-            holder.btnAddToCart.alpha = 0.5f
-        }
+    // 2. Combined Availability Logic
+    // Check if the item is active, has stock, AND the stall is open
+    val isStallOpen = food.is_open // Ensure your FoodItem data class has this field
+    val hasStock = food.stock_qty > 0
+    val isItemActive = food.is_available
 
-        // Load image using Constants helper
-        val imageUrl = Constants.getFullImageUrl(food.image_url)
+    val canOrder = isStallOpen && hasStock && isItemActive
 
-        Glide.with(ctx)
-            .load(imageUrl)
-            .placeholder(R.drawable.food_image)
-            .error(R.drawable.food_image)
-            .into(holder.image)
+    if (canOrder) {
+      // --- OPEN / AVAILABLE STATE ---
+      holder.statusDot.background = ContextCompat.getDrawable(ctx, R.drawable.bg_status_dot_open)
+      holder.status.text = "Available"
+      holder.status.setTextColor(Color.parseColor("#43A047"))
 
-        // Click listeners
-        holder.itemView.setOnClickListener { onClick(food) }
-        holder.btnAddToCart.setOnClickListener {
-            if (isAvailable) onClick(food)
-        }
+      holder.btnAddToCart.setCardBackgroundColor(Color.parseColor("#1B5E20"))
+      holder.btnAddToCart.isEnabled = true
+      holder.btnAddToCart.alpha = 1f
+
+      // Make sure the whole item is clickable if the stall is open
+      holder.itemView.isClickable = true
+      holder.itemView.alpha = 1f
+    } else {
+      // --- CLOSED / UNAVAILABLE STATE ---
+      holder.statusDot.background = ContextCompat.getDrawable(ctx, R.drawable.bg_status_dot_closed)
+      holder.status.setTextColor(Color.parseColor("#E53935"))
+
+      // Determine the specific label to show
+      holder.status.text = when {
+        !isStallOpen -> "Stall Closed"
+        food.stock_qty <= 0 -> "Out of Stock"
+        else -> "Unavailable"
+      }
+
+      // Disable interaction
+      holder.btnAddToCart.setCardBackgroundColor(Color.parseColor("#E0E0E0"))
+      holder.btnAddToCart.isEnabled = false
+      holder.btnAddToCart.alpha = 0.5f
+
+      // Disable the whole card click if the stall is closed
+      holder.itemView.isClickable = false
+      holder.itemView.alpha = 0.8f // Slightly dim the whole card to show it's disabled
     }
+
+    // 3. Image loading
+    val imageUrl = Constants.getFullImageUrl(food.image_url)
+    Glide.with(ctx)
+      .load(imageUrl)
+      .placeholder(R.drawable.food_image)
+      .error(R.drawable.food_image)
+      .into(holder.image)
+
+    // 4. Click listeners (Respect the 'canOrder' state)
+    holder.itemView.setOnClickListener {
+      if (canOrder) onClick(food)
+    }
+
+    holder.btnAddToCart.setOnClickListener {
+      if (canOrder) onClick(food)
+    }
+  }
 
     override fun getItemCount() = displayedList.size
 

@@ -22,7 +22,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     super.onMessageReceived(remoteMessage)
 
     val title = remoteMessage.notification?.title ?: remoteMessage.data["title"] ?: "Order Update"
-    val body = remoteMessage.notification?.body ?: remoteMessage.data["body"] ?: "Your order is ready!"
+    val body =
+      remoteMessage.notification?.body ?: remoteMessage.data["body"] ?: "Your order is ready!"
 
     saveNotification(title, body)
     showNotification(title, body)
@@ -38,14 +39,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     val userPrefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
     val employeeId = userPrefs.getString("employee_id", null)
 
-    // If no employee_id, don't save
     if (employeeId.isNullOrEmpty()) return
 
     val prefs = getSharedPreferences("notifications_$employeeId", Context.MODE_PRIVATE)
     val existing = prefs.getString("notif_list", "[]")
     val array = JSONArray(existing)
 
-    // Format timestamp in UTC
     val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
     sdf.timeZone = TimeZone.getTimeZone("UTC")
 
@@ -85,11 +84,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     val intent = Intent(this, MainActivity::class.java).apply {
-      flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+      flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+      putExtra("navigate_to", "history")
     }
+
     val pendingIntent = PendingIntent.getActivity(
       this, 0, intent,
-      PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
     val notification = NotificationCompat.Builder(this, channelId)

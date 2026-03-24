@@ -5,6 +5,16 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/nav_stall">
 
+  <action
+      android:id="@+id/action_global_to_nav_history"
+      app:destination="@id/nav_history"
+      app:popUpTo="@id/nav_stall"
+      app:popUpToInclusive="false" />
+
+  <!-- ══════════════════════════════════════ -->
+  <!--         BOTTOM NAV ROOTS              -->
+  <!-- ══════════════════════════════════════ -->
+
   <fragment
       android:id="@+id/nav_stall"
       android:name="com.yutahnahsyah.upsmartcanteen.fragments.StallFragment"
@@ -19,7 +29,11 @@
       android:id="@+id/nav_food"
       android:name="com.yutahnahsyah.upsmartcanteen.fragments.FoodFragment"
       android:label="Food"
-      tools:layout="@layout/fragment_food" />
+      tools:layout="@layout/fragment_food">
+    <action
+        android:id="@+id/action_nav_food_to_nav_store_food"
+        app:destination="@id/nav_store_food" />
+  </fragment>
 
   <fragment
       android:id="@+id/nav_cart"
@@ -34,6 +48,11 @@
         app:destination="@id/nav_store_food" />
   </fragment>
 
+  <!-- ══════════════════════════════════════ -->
+  <!--         CHECKOUT FLOW                 -->
+  <!--  Cart → CartDetails → Receipt sheet   -->
+  <!-- ══════════════════════════════════════ -->
+
   <fragment
       android:id="@+id/nav_cart_details"
       android:name="com.yutahnahsyah.upsmartcanteen.fragments.CartDetailsFragment"
@@ -42,23 +61,49 @@
     <argument
         android:name="storeName"
         app:argType="string" />
+    <!-- Add more items from the same stall -->
     <action
         android:id="@+id/action_nav_cart_details_to_nav_store_food"
         app:destination="@id/nav_store_food" />
-    <action
-        android:id="@+id/action_nav_cart_details_to_nav_payment"
-        app:destination="@id/nav_payment" />
-    <action
-        android:id="@+id/action_nav_cart_details_to_nav_history"
-        app:destination="@id/nav_history"
-        app:popUpTo="@id/nav_cart"
-        app:popUpToInclusive="true" />
+    <!-- Continue shopping — back to stalls root -->
     <action
         android:id="@+id/action_nav_cart_details_to_nav_stall"
         app:destination="@id/nav_stall"
         app:popUpTo="@id/nav_stall"
         app:popUpToInclusive="false" />
   </fragment>
+
+  <!-- ══════════════════════════════════════ -->
+  <!--         SHARED DESTINATIONS           -->
+  <!-- ══════════════════════════════════════ -->
+
+  <fragment
+      android:id="@+id/nav_store_food"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.StoreFoodFragment"
+      android:label="Store Menu"
+      tools:layout="@layout/fragment_store_food">
+    <argument
+        android:name="storeName"
+        app:argType="string" />
+    <argument
+        android:name="stallId"
+        app:argType="integer" />
+    <action
+        android:id="@+id/action_nav_store_food_to_nav_cart"
+        app:destination="@id/nav_cart"
+        app:popUpTo="@id/nav_cart"
+        app:popUpToInclusive="true" />
+  </fragment>
+
+  <fragment
+      android:id="@+id/nav_history"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.HistoryFragment"
+      android:label="Order History"
+      tools:layout="@layout/fragment_history" />
+
+  <!-- ══════════════════════════════════════ -->
+  <!--         PROFILE TAB                   -->
+  <!-- ══════════════════════════════════════ -->
 
   <fragment
       android:id="@+id/nav_profile"
@@ -80,6 +125,7 @@
     <action
         android:id="@+id/action_nav_profile_to_nav_support"
         app:destination="@id/nav_support" />
+    <!-- PaymentFragment: informational only, accessible from Profile -->
     <action
         android:id="@+id/action_nav_profile_to_nav_payment"
         app:destination="@id/nav_payment" />
@@ -92,29 +138,16 @@
   </fragment>
 
   <fragment
-      android:id="@+id/nav_store_food"
-      android:name="com.yutahnahsyah.upsmartcanteen.fragments.StoreFoodFragment"
-      android:label="Store Menu"
-      tools:layout="@layout/fragment_store_food">
-    <argument
-        android:name="storeName"
-        app:argType="string" />
-    <argument
-        android:name="stallId"
-        app:argType="integer" />
-  </fragment>
+      android:id="@+id/nav_payment"
+      android:name="com.yutahnahsyah.upsmartcanteen.fragments.PaymentFragment"
+      android:label="Payment Methods"
+      tools:layout="@layout/fragment_payment" />
 
   <fragment
       android:id="@+id/nav_edit_profile"
       android:name="com.yutahnahsyah.upsmartcanteen.fragments.EditProfileFragment"
       android:label="Edit Profile"
       tools:layout="@layout/fragment_edit_profile" />
-
-  <fragment
-      android:id="@+id/nav_history"
-      android:name="com.yutahnahsyah.upsmartcanteen.fragments.HistoryFragment"
-      android:label="Order History"
-      tools:layout="@layout/fragment_history" />
 
   <fragment
       android:id="@+id/nav_notifications"
@@ -137,12 +170,6 @@
       android:name="com.yutahnahsyah.upsmartcanteen.fragments.SupportFragment"
       android:label="Support"
       tools:layout="@layout/fragment_support" />
-
-  <fragment
-      android:id="@+id/nav_payment"
-      android:name="com.yutahnahsyah.upsmartcanteen.fragments.PaymentFragment"
-      android:label="Payment"
-      tools:layout="@layout/fragment_payment" />
 
   <fragment
       android:id="@+id/nav_terms"

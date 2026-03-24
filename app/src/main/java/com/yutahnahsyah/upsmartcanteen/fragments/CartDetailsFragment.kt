@@ -22,10 +22,10 @@ import com.yutahnahsyah.upsmartcanteen.adapter.CartItemAdapter
 import com.yutahnahsyah.upsmartcanteen.data.model.FoodItem
 import com.google.android.material.button.MaterialButton
 import com.yutahnahsyah.upsmartcanteen.PlaceOrderRequest
-import kotlinx.coroutines.launch
-import java.util.Locale
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.Locale
 
 class CartDetailsFragment : Fragment() {
 
@@ -94,7 +94,6 @@ class CartDetailsFragment : Fragment() {
     rvCartItems?.adapter = adapter
 
     fetchCartItems()
-    startPolling()
 
     btnPlaceOrder?.setOnClickListener {
       val items = adapter?.getItems() ?: emptyList()
@@ -106,10 +105,14 @@ class CartDetailsFragment : Fragment() {
     }
   }
 
-  override fun onDestroyView() {
-    super.onDestroyView()
+  override fun onResume() {
+    super.onResume()
+    startPolling()
+  }
+
+  override fun onPause() {
+    super.onPause()
     pollingJob?.cancel()
-    pollingJob = null
   }
 
   private fun startPolling() {
@@ -142,7 +145,7 @@ class CartDetailsFragment : Fragment() {
     }
   }
 
-  private fun updateCartItemQuantity(cartItemId: Int, quantity: Int) {  // ✅ inside class
+  private fun updateCartItemQuantity(cartItemId: Int, quantity: Int) {
     val sharedPref = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
     val token = sharedPref.getString("auth_token", null) ?: return
 
@@ -179,7 +182,6 @@ class CartDetailsFragment : Fragment() {
             updateTotals(stallItems)
           }
 
-          // ✅ Always check availability after loading
           validateCart(token)
         } else {
           Log.e("CART_DETAILS", "Error: ${response.code()}")
@@ -198,7 +200,6 @@ class CartDetailsFragment : Fragment() {
           val result = response.body() ?: return@launch
           adapter?.markUnavailableItems(result.unavailableItems)
 
-          // ✅ Show stall status banner
           when {
             result.stallInactive -> showStallBanner("This stall is no longer available.", "#B71C1C")
             result.stallClosed -> showStallBanner("This stall is currently closed.", "#E65100")
@@ -228,7 +229,11 @@ class CartDetailsFragment : Fragment() {
     val token = sharedPref.getString("auth_token", null) ?: return
 
     if (adapter?.hasUnavailableItems() == true) {
-      Toast.makeText(requireContext(), "Please remove unavailable items before placing your order.", Toast.LENGTH_LONG).show()
+      Toast.makeText(
+        requireContext(),
+        "Please remove unavailable items before placing your order.",
+        Toast.LENGTH_LONG
+      ).show()
       return
     }
 
@@ -244,7 +249,6 @@ class CartDetailsFragment : Fragment() {
 
   private fun submitOrder(token: String) {
     viewLifecycleOwner.lifecycleScope.launch {
-      // Re-validate stall before placing
       try {
         val validationResponse = RetrofitClient.instance.validateCart("Bearer $token")
         if (validationResponse.isSuccessful) {
@@ -284,15 +288,14 @@ class CartDetailsFragment : Fragment() {
           }
           val total = itemsToOrder.sumOf { it.price * it.quantity }
 
-          val receipt = ReceiptBottomSheetFragment.newInstance(
+          ReceiptBottomSheetFragment.newInstance(
             orderId = order?.order_id ?: 0,
             stallName = args.storeName,
             items = itemsSummary,
             total = total,
             payment = "Cash",
             remarks = remarks
-          )
-          receipt.show(parentFragmentManager, "ReceiptBottomSheet")
+          ).show(parentFragmentManager, "ReceiptBottomSheet")
 
         } else {
           val errorMsg = response.errorBody()?.string() ?: ""
